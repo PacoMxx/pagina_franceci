@@ -2,419 +2,661 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FranCeci - Art&iacute;culos de Segunda Mano</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script>
-        if (typeof tailwind !== 'undefined') {
-            tailwind.config = {
-                theme: {
-                    extend: {
-                        colors: {
-                            vintage: {
-                                bg: '#fbf9f5',
-                                card: '#f4efe6',
-                                primary: '#5c4033',
-                                accent: '#b85d34',
-                                dark: '#2c221e',
-                                border: '#e6dec5'
-                            }
-                        },
-                        fontFamily: {
-                            serif: ['"Playfair Display"', 'serif'],
-                            sans: ['"Plus Jakarta Sans"', 'sans-serif']
-                        }
-                    }
-                }
-            }
-        }
-    </script>
     <style>
-        body { background-color: #fbf9f5; color: #2c221e; font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; }
-        .ventana-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.65); z-index: 9999; align-items: center; justify-content: center; padding: 16px; overflow-y: auto; }
-        .ventana-modal.activa { display: flex !important; }
-        .oculto { display: none !important; }
-        button { cursor: pointer; touch-action: manipulation; }
-        .carrusel-btn { background: rgba(44, 34, 30, 0.75); color: white; width: 30px; height: 30px; border-radius: 9999px; display: flex; align-items: center; justify-content: center; font-weight: bold; transition: background 0.2s; }
-        .carrusel-btn:hover { background: rgba(184, 93, 52, 0.95); }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { background-color: #fbf9f5; color: #2c221e; font-family: Georgia, 'Times New Roman', serif; min-height: 100vh; display: flex; flex-direction: column; }
+        .sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        
+        /* Barra superior */
+        header { background: #f4efe6; border-bottom: 2px solid #e6dec5; position: sticky; top: 0; z-index: 100; padding: 12px 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
+        .nav-container { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+        .brand { display: flex; align-items: center; gap: 10px; }
+        .brand h1 { font-size: 24px; color: #5c4033; letter-spacing: 0.5px; }
+        .brand p { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #b85d34; font-weight: bold; }
+        
+        /* Botones */
+        .nav-buttons { display: flex; align-items: center; gap: 8px; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 10px 14px; border-radius: 8px; font-size: 13px; font-weight: bold; border: none; cursor: pointer; text-decoration: none; position: relative; z-index: 10; user-select: none; }
+        .btn:active { transform: scale(0.96); }
+        .btn-primary { background: #5c4033; color: #ffffff; }
+        .btn-secondary { background: #e6dec5; color: #5c4033; border: 1px solid #d2c5a0; }
+        .btn-accent { background: #b85d34; color: #ffffff; }
+        .btn-whatsapp { background: #25D366; color: #ffffff; width: 100%; padding: 14px; font-size: 15px; border-radius: 10px; margin-top: 10px; }
+        .badge-count { background: #2c221e; color: #fff; font-size: 11px; padding: 2px 6px; border-radius: 99px; margin-left: 4px; }
+
+        /* Banner */
+        .hero { background: #efe8d8; border-bottom: 1px solid #e6dec5; padding: 28px 16px; text-align: center; }
+        .hero h2 { font-size: 24px; color: #5c4033; margin-bottom: 8px; }
+        .hero p { font-size: 14px; color: #4a3b34; max-width: 600px; margin: 0 auto 14px; line-height: 1.4; }
+        .pill { display: inline-block; background: #fff; border: 1px solid #e6dec5; padding: 6px 14px; border-radius: 99px; font-size: 12px; color: #5c4033; font-weight: bold; }
+
+        /* Contenedor Principal */
+        main { max-width: 1100px; width: 100%; margin: 0 auto; padding: 24px 16px; flex: 1; }
+        .catalog-header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid #e6dec5; }
+        .filters { display: flex; flex-wrap: wrap; gap: 6px; }
+        .filter-btn { padding: 7px 14px; border-radius: 99px; font-size: 12px; font-weight: bold; border: 1px solid #e6dec5; background: #f4efe6; color: #5c4033; cursor: pointer; }
+        .filter-btn.active { background: #5c4033; color: #fff; border-color: #5c4033; }
+
+        /* Grid de Productos */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
+        .card { background: #f4efe6; border: 1px solid #e6dec5; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 2px 5px rgba(0,0,0,0.04); }
+        .card-img-wrap { position: relative; height: 220px; background: #e6dec5; overflow: hidden; }
+        .card-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .cat-tag { position: absolute; top: 8px; left: 8px; background: rgba(44,34,30,0.85); color: #fff; font-size: 10px; text-transform: uppercase; padding: 4px 8px; border-radius: 4px; font-weight: bold; }
+        .slide-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(44,34,30,0.8); color: #fff; border: none; width: 32px; height: 32px; border-radius: 50%; font-size: 14px; font-weight: bold; cursor: pointer; z-index: 5; }
+        .slide-left { left: 8px; }
+        .slide-right { right: 8px; }
+        .slide-counter { position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.7); color: #fff; font-size: 11px; padding: 2px 8px; border-radius: 99px; }
+        .card-body { padding: 14px; display: flex; flex-direction: column; flex: 1; }
+        .card-title { font-size: 17px; color: #5c4033; font-weight: bold; margin-bottom: 6px; }
+        .card-desc { font-size: 13px; color: #4a3b34; margin-bottom: 12px; flex: 1; line-height: 1.4; }
+        .card-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 10px; border-top: 1px solid #e6dec5; }
+        .price { font-size: 18px; font-weight: bold; color: #b85d34; }
+
+        /* Estado Vacio */
+        .empty-box { text-align: center; padding: 50px 20px; }
+        .empty-box h4 { font-size: 18px; color: #5c4033; margin-top: 10px; }
+        .empty-box p { font-size: 13px; color: #6e5a4f; margin-top: 6px; }
+
+        /* Ventanas Modales */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.65); z-index: 9999; align-items: center; justify-content: center; padding: 16px; overflow-y: auto; }
+        .modal-box { background: #f4efe6; border: 2px solid #e6dec5; border-radius: 16px; max-width: 480px; width: 100%; padding: 20px; max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e6dec5; padding-bottom: 10px; margin-bottom: 16px; }
+        .modal-header h3 { font-size: 18px; color: #5c4033; }
+        .close-btn { background: #e6dec5; border: none; width: 32px; height: 32px; border-radius: 50%; font-size: 16px; font-weight: bold; color: #2c221e; cursor: pointer; }
+
+        /* Formularios */
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-size: 11px; font-weight: bold; text-transform: uppercase; color: #5c4033; margin-bottom: 5px; }
+        .form-control { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #d2c5a0; background: #fff; font-size: 14px; color: #2c221e; }
+        .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .preview-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 10px; }
+        .preview-item { position: relative; height: 60px; border-radius: 6px; overflow: hidden; border: 1px solid #5c4033; }
+        .preview-item img { width: 100%; height: 100%; object-fit: cover; }
+        .preview-del { position: absolute; top: 2px; right: 2px; background: #c0392b; color: #fff; border: none; width: 18px; height: 18px; border-radius: 50%; font-size: 10px; cursor: pointer; }
+
+        footer { background: #f4efe6; border-top: 1px solid #e6dec5; text-align: center; padding: 18px; font-size: 12px; color: #6e5a4f; margin-top: auto; }
     </style>
 </head>
-<body class="bg-vintage-bg text-vintage-dark font-sans antialiased min-h-screen flex flex-col">
+<body>
 
-    <!-- Header / Navbar -->
-    <header class="bg-[#f4efe6] border-b border-[#e6dec5] sticky top-0 z-40 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <span class="text-3xl">&#129523;</span>
+    <!-- BARRA DE NAVEGACION -->
+    <header>
+        <div class="nav-container">
+            <div class="brand">
+                <span style="font-size: 28px;">&#129523;</span>
                 <div>
-                    <h1 class="text-2xl sm:text-3xl font-serif font-bold text-[#5c4033] tracking-wide">FranCeci</h1>
-                    <p class="text-xs uppercase tracking-widest text-[#b85d34] font-semibold">Art&iacute;culos de segunda mano</p>
+                    <h1>FranCeci</h1>
+                    <p class="sans">Art&iacute;culos de segunda mano</p>
                 </div>
             </div>
             
-            <div class="flex items-center space-x-2 sm:space-x-3">
-                <button type="button" id="btnAbrirPublicar" class="bg-[#5c4033] text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium hover:bg-[#2c221e] transition flex items-center space-x-1 shadow">
-                    <span>&#10133;</span>
-                    <span class="hidden sm:inline">Publicar</span>
+            <div class="nav-buttons sans">
+                <button type="button" class="btn btn-primary" onclick="mostrarVentana('uploadModal')">
+                    &#10133; Publicar
                 </button>
-
-                <button type="button" id="btnAbrirBanco" class="bg-[#e6dec5] text-[#5c4033] px-3 py-2 rounded-lg text-xs sm:text-sm font-medium hover:bg-[#d8ceb0] transition" title="Configurar Banco y Sincronizar con GitHub">
-                    &#9881;&#65039; <span class="hidden md:inline">Admin / Web</span>
+                <button type="button" class="btn btn-secondary" onclick="abrirConfigBanco()">
+                    &#9881;&#65039; Admin
                 </button>
-
-                <button type="button" id="btnAbrirCarrito" class="relative bg-[#b85d34] text-white p-2.5 rounded-lg hover:bg-[#a04e2c] transition flex items-center justify-center">
-                    &#128722;
-                    <span id="cartCount" class="absolute -top-2 -right-2 bg-[#2c221e] text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-[#f4efe6]">0</span>
+                <button type="button" class="btn btn-accent" onclick="abrirCarrito()">
+                    &#128722; <span id="cartCount" class="badge-count">0</span>
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- Hero / Info Banner -->
-    <section class="bg-[#efe8d8] border-b border-[#e6dec5] py-8 px-4 text-center">
-        <div class="max-w-3xl mx-auto">
-            <h2 class="text-2xl sm:text-3xl font-serif font-bold text-[#5c4033] mb-2">Tesoro y estilo con historia</h2>
-            <p class="text-sm sm:text-base text-[#2c221e]/80 mb-4">
-                Art&iacute;culos de segunda mano &uacute;nicos seleccionados con amor. Dale una segunda oportunidad a las cosas y encuentra piezas especiales.
-            </p>
-            <div class="inline-flex items-center bg-white/80 border border-[#e6dec5] rounded-full px-4 py-1.5 text-xs sm:text-sm text-[#5c4033] font-medium shadow-sm">
-                &#128205; Entregas personales en alguna l&iacute;nea del metro o punto a convenir en CDMX
-            </div>
-        </div>
+    <!-- BANNER -->
+    <section class="hero">
+        <h2>Tesoro y estilo con historia</h2>
+        <p class="sans">Art&iacute;culos de segunda mano &uacute;nicos seleccionados con amor. Dale una segunda oportunidad a las cosas y encuentra piezas especiales.</p>
+        <div class="pill sans">&#128205; Entregas personales en alguna l&iacute;nea del metro o punto a convenir en CDMX</div>
     </section>
 
-    <!-- Main Content / Catalogo -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-grow w-full">
-        <div class="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4 border-b border-[#e6dec5] pb-4">
-            <h3 class="text-xl font-serif font-bold text-[#5c4033]">Cat&aacute;logo Disponible</h3>
-            
-            <!-- Filtros de Categoria -->
-            <div class="flex flex-wrap gap-2 justify-center" id="categoryFilters">
-                <button type="button" data-cat="todos" class="filter-btn px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium bg-[#5c4033] text-white transition">Todos</button>
-                <button type="button" data-cat="ropa" class="filter-btn px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium bg-[#f4efe6] text-[#5c4033] border border-[#e6dec5] transition">Ropa y Moda</button>
-                <button type="button" data-cat="hogar" class="filter-btn px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium bg-[#f4efe6] text-[#5c4033] border border-[#e6dec5] transition">Hogar</button>
-                <button type="button" data-cat="coleccion" class="filter-btn px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium bg-[#f4efe6] text-[#5c4033] border border-[#e6dec5] transition">Colecci&oacute;n y Otros</button>
+    <!-- CATALOGO -->
+    <main class="sans">
+        <div class="catalog-header">
+            <h3 style="font-size: 20px; color: #5c4033; font-family: Georgia, serif;">Cat&aacute;logo Disponible</h3>
+            <div class="filters">
+                <button type="button" class="filter-btn active" id="f-todos" onclick="filtrarCat('todos')">Todos</button>
+                <button type="button" class="filter-btn" id="f-ropa" onclick="filtrarCat('ropa')">Ropa y Moda</button>
+                <button type="button" class="filter-btn" id="f-hogar" onclick="filtrarCat('hogar')">Hogar</button>
+                <button type="button" class="filter-btn" id="f-coleccion" onclick="filtrarCat('coleccion')">Colecci&oacute;n y Otros</button>
             </div>
         </div>
 
-        <!-- Grid de Productos -->
-        <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
+        <div id="productGrid" class="grid"></div>
 
-        <!-- Estado vacio -->
-        <div id="emptyState" class="text-center py-16">
-            <span class="text-5xl mb-3 block">&#128230;</span>
-            <h4 class="text-lg font-serif font-bold text-[#5c4033]">No hay art&iacute;culos publicados todav&iacute;a</h4>
-            <p class="text-sm text-[#2c221e]/70 mt-1">Usa el bot&oacute;n "Publicar" arriba a la derecha para subir tus productos con varias fotos.</p>
+        <div id="emptyState" class="empty-box">
+            <div style="font-size: 42px;">&#128230;</div>
+            <h4>No hay art&iacute;culos publicados todav&iacute;a</h4>
+            <p>Toca el bot&oacute;n <b>"+ Publicar"</b> arriba a la derecha para subir tu primer art&iacute;culo.</p>
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-[#f4efe6] border-t border-[#e6dec5] py-6 text-center text-xs text-[#2c221e]/70 mt-auto">
-        <p>&copy; 2026 FranCeci &bull; Tienda de Art&iacute;culos de Segunda Mano &bull; CDMX</p>
+    <footer class="sans">
+        &copy; 2026 FranCeci &bull; Art&iacute;culos de Segunda Mano &bull; CDMX
     </footer>
 
-    <!-- MODAL: Publicar Articulo (Con soporte multi-foto) -->
-    <div id="uploadModal" class="ventana-modal">
-        <div class="bg-[#f4efe6] rounded-2xl max-w-lg w-full p-6 border border-[#e6dec5] shadow-xl my-8 max-h-[92vh] overflow-y-auto">
-            <div class="flex justify-between items-center mb-4 border-b border-[#e6dec5] pb-3">
-                <h3 class="text-lg font-serif font-bold text-[#5c4033]">Publicar Nuevo Art&iacute;culo</h3>
-                <button type="button" onclick="cerrarModal('uploadModal')" class="text-[#2c221e] hover:text-[#b85d34] font-bold text-xl px-2">&#10005;</button>
+    <!-- VENTANA 1: PUBLICAR ARTICULO -->
+    <div id="uploadModal" class="modal-overlay sans">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>Publicar Nuevo Art&iacute;culo</h3>
+                <button type="button" class="close-btn" onclick="ocultarVentana('uploadModal')">&#10005;</button>
             </div>
-            
-            <form id="productForm" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-[#5c4033] mb-1">Nombre del Art&iacute;culo</label>
-                    <input type="text" id="prodName" required class="w-full bg-white border border-[#e6dec5] rounded-lg p-2.5 text-sm" placeholder="Ej. Chamarra vintage de piel">
-                </div>
-                
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-[#5c4033] mb-1">Precio ($MXN)</label>
-                        <input type="number" id="prodPrice" required min="1" class="w-full bg-white border border-[#e6dec5] rounded-lg p-2.5 text-sm" placeholder="Ej. 350">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-[#5c4033] mb-1">Categor&iacute;a</label>
-                        <select id="prodCategory" class="w-full bg-white border border-[#e6dec5] rounded-lg p-2.5 text-sm">
-                            <option value="ropa">Ropa y Moda</option>
-                            <option value="hogar">Hogar</option>
-                            <option value="coleccion">Colecci&oacute;n y Otros</option>
-                        </select>
-                    </div>
-                </div>
 
-                <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-[#5c4033] mb-1">Descripci&oacute;n y Detalles</label>
-                    <textarea id="prodDesc" rows="3" required class="w-full bg-white border border-[#e6dec5] rounded-lg p-2.5 text-sm" placeholder="Condiciones del art&iacute;culo, medidas, talla..."></textarea>
-                </div>
+            <div class="form-group">
+                <label>Nombre del Art&iacute;culo</label>
+                <input type="text" id="prodName" class="form-control" placeholder="Ej. Chamarra vintage de mezclilla">
+            </div>
 
-                <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-[#5c4033] mb-1">Fotograf&iacute;as (Puedes subir varias)</label>
-                    <input type="file" id="prodImageFiles" accept="image/*" multiple class="w-full text-xs text-[#2c221e] bg-white p-2 rounded-lg border border-[#e6dec5]">
-                    <p class="text-[11px] text-[#2c221e]/70 mt-1">&#128248; Selecciona una o varias fotos a la vez (o ve agreg&aacute;ndolas una por una).</p>
-                    
-                    <!-- Previsualizacion de fotos seleccionadas -->
-                    <div id="previewContainer" class="grid grid-cols-4 gap-2 mt-3"></div>
+            <div class="row-2">
+                <div class="form-group">
+                    <label>Precio ($ MXN)</label>
+                    <input type="number" id="prodPrice" class="form-control" placeholder="Ej. 250">
                 </div>
+                <div class="form-group">
+                    <label>Categor&iacute;a</label>
+                    <select id="prodCategory" class="form-control">
+                        <option value="ropa">Ropa y Moda</option>
+                        <option value="hogar">Hogar</option>
+                        <option value="coleccion">Colecci&oacute;n y Otros</option>
+                    </select>
+                </div>
+            </div>
 
-                <button type="submit" id="btnSubmitProd" class="w-full bg-[#b85d34] text-white py-3 rounded-xl font-bold hover:bg-[#a04e2c] transition shadow">
-                    Guardar y Publicar Art&iacute;culo
-                </button>
-            </form>
+            <div class="form-group">
+                <label>Descripci&oacute;n y Detalles</label>
+                <textarea id="prodDesc" rows="3" class="form-control" placeholder="Talla, estado, medidas o detalles..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Fotograf&iacute;as (Puedes elegir varias)</label>
+                <input type="file" id="prodImageFiles" accept="image/*" multiple class="form-control" onchange="procesarFotosSeleccionadas(this)">
+                <p style="font-size: 11px; color: #6e5a4f; margin-top: 4px;">Puedes tocar el bot&oacute;n varias veces para ir sumando m&aacute;s fotos del mismo art&iacute;culo.</p>
+                <div id="previewContainer" class="preview-grid"></div>
+            </div>
+
+            <button type="button" class="btn btn-accent" style="width: 100%; padding: 12px; font-size: 15px;" onclick="guardarProducto()">
+                &#10004; Guardar y Publicar Art&iacute;culo
+            </button>
         </div>
     </div>
 
-    <!-- MODAL: Admin, Banco y Sincronizacion GitHub -->
-    <div id="bankModal" class="ventana-modal">
-        <div class="bg-[#f4efe6] rounded-2xl max-w-md w-full p-6 border border-[#e6dec5] shadow-xl max-h-[92vh] overflow-y-auto">
-            <div class="flex justify-between items-center mb-4 border-b border-[#e6dec5] pb-3">
-                <h3 class="text-lg font-serif font-bold text-[#5c4033]">Panel de Administraci&oacute;n</h3>
-                <button type="button" onclick="cerrarModal('bankModal')" class="text-[#2c221e] hover:text-[#b85d34] font-bold text-xl px-2">&#10005;</button>
+    <!-- VENTANA 2: ADMIN Y BANCO -->
+    <div id="bankModal" class="modal-overlay sans">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>Configuraci&oacute;n y Web</h3>
+                <button type="button" class="close-btn" onclick="ocultarVentana('bankModal')">&#10005;</button>
             </div>
 
-            <!-- Seccion 1: Datos Bancarios -->
-            <div class="mb-6">
-                <h4 class="text-xs font-bold uppercase tracking-wider text-[#b85d34] mb-2">&#127974; 1. Cuenta para Transferencias</h4>
-                <div class="space-y-3 bg-white/60 p-3 rounded-xl border border-[#e6dec5]">
-                    <div>
-                        <label class="block text-[11px] font-bold uppercase text-[#5c4033] mb-1">Banco</label>
-                        <input type="text" id="bankNameInput" class="w-full bg-white border border-[#e6dec5] rounded-lg p-2 text-sm" placeholder="Ej. BBVA / Nu / Santander">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] font-bold uppercase text-[#5c4033] mb-1">CLABE o Tarjeta</label>
-                        <input type="text" id="bankClabeInput" class="w-full bg-white border border-[#e6dec5] rounded-lg p-2 text-sm" placeholder="18 d&iacute;gitos o 16 de tarjeta">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] font-bold uppercase text-[#5c4033] mb-1">Nombre del Titular</label>
-                        <input type="text" id="bankOwnerInput" class="w-full bg-white border border-[#e6dec5] rounded-lg p-2 text-sm" placeholder="Nombre completo">
-                    </div>
-                    <button type="button" id="btnGuardarBanco" class="w-full bg-[#5c4033] text-white py-2 rounded-lg font-bold text-xs hover:bg-[#2c221e] transition">
-                        Guardar Datos Bancarios
-                    </button>
-                </div>
+            <p style="font-size: 12px; font-weight: bold; color: #b85d34; margin-bottom: 8px;">1. DATOS PARA TRANSFERENCIAS</p>
+            <div class="form-group">
+                <label>Banco</label>
+                <input type="text" id="bankNameInput" class="form-control" placeholder="Ej. BBVA / Nu / Santander">
             </div>
+            <div class="form-group">
+                <label>CLABE o N&uacute;mero de Tarjeta</label>
+                <input type="text" id="bankClabeInput" class="form-control" placeholder="18 d&iacute;gitos CLABE o 16 de tarjeta">
+            </div>
+            <div class="form-group">
+                <label>Nombre del Titular</label>
+                <input type="text" id="bankOwnerInput" class="form-control" placeholder="Tu nombre completo">
+            </div>
+            <button type="button" class="btn btn-primary" style="width: 100%; margin-bottom: 18px;" onclick="guardarBanco()">
+                Guardar Cuenta Bancaria
+            </button>
 
-            <!-- Seccion 2: Publicar para todos en GitHub -->
-            <div class="border-t border-[#e6dec5] pt-4">
-                <h4 class="text-xs font-bold uppercase tracking-wider text-[#b85d34] mb-1">&#9729;&#65039; 2. Hacer visible en otros celulares (GitHub)</h4>
-                <p class="text-xs text-[#2c221e]/80 mb-3">
-                    Tus art&iacute;culos ya se guardan autom&aacute;ticamente en este dispositivo. Si quieres que tus clientes los vean al entrar a tu link de GitHub desde sus propios celulares, descarga tu p&aacute;gina actualizada aqu&iacute; y s&uacute;bela a tu repositorio:
+            <div style="border-top: 1px solid #e6dec5; padding-top: 14px;">
+                <p style="font-size: 12px; font-weight: bold; color: #b85d34; margin-bottom: 6px;">2. ACTUALIZAR ARCHIVO PARA GITHUB</p>
+                <p style="font-size: 12px; color: #4a3b34; margin-bottom: 10px;">
+                    Tus productos se guardan autom&aacute;ticamente en tu navegador. Cuando quieras que tus clientes los vean desde otros celulares en tu link de GitHub, descarga este archivo actualizado y s&uacute;belo a tu repositorio:
                 </p>
-                <button type="button" id="btnExportarHTML" class="w-full bg-[#b85d34] text-white py-3 rounded-xl font-bold text-xs sm:text-sm hover:bg-[#a04e2c] transition shadow flex items-center justify-center space-x-2">
-                    <span>&#128190;</span>
-                    <span>Descargar index.html con mis Art&iacute;culos</span>
+                <button type="button" class="btn btn-accent" style="width: 100%; padding: 12px;" onclick="exportarTiendaCompleta()">
+                    &#128190; Descargar index.html con mis Art&iacute;culos
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL: Carrito de Compras -->
-    <div id="cartModal" class="ventana-modal">
-        <div class="bg-[#f4efe6] rounded-2xl max-w-lg w-full p-6 border border-[#e6dec5] shadow-xl flex flex-col max-h-[90vh]">
-            <div class="flex justify-between items-center mb-4 border-b border-[#e6dec5] pb-3">
-                <h3 class="text-lg font-serif font-bold text-[#5c4033]">Tu Carrito de Compras</h3>
-                <button type="button" onclick="cerrarModal('cartModal')" class="text-[#2c221e] hover:text-[#b85d34] font-bold text-xl px-2">&#10005;</button>
+    <!-- VENTANA 3: CARRITO DE COMPRAS -->
+    <div id="cartModal" class="modal-overlay sans">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>Tu Carrito de Compras</h3>
+                <button type="button" class="close-btn" onclick="ocultarVentana('cartModal')">&#10005;</button>
             </div>
 
-            <div id="cartItemsContainer" class="flex-grow overflow-y-auto space-y-3 pr-1 divide-y divide-[#e6dec5]"></div>
+            <div id="cartItemsContainer" style="max-height: 260px; overflow-y: auto; margin-bottom: 14px;"></div>
 
-            <div class="mt-4 pt-4 border-t border-[#e6dec5]">
-                <div class="flex justify-between items-center mb-4">
-                    <span class="font-serif font-bold text-[#5c4033] text-lg">Total:</span>
-                    <span id="cartTotal" class="font-bold text-xl text-[#b85d34]">$0 MXN</span>
+            <div style="border-top: 1px solid #e6dec5; padding-top: 12px;">
+                <div style="display: flex; justify-content: space-between; font-size: 18px; font-weight: bold; margin-bottom: 12px;">
+                    <span>Total:</span>
+                    <span id="cartTotal" style="color: #b85d34;">$0 MXN</span>
                 </div>
-
-                <div class="bg-white/60 p-3 rounded-lg border border-[#e6dec5] mb-4 text-xs text-[#2c221e]">
-                    <p class="font-bold mb-1 text-[#5c4033]">&#128666; M&eacute;todo de Entrega:</p>
-                    <p>Entregas personales en alguna l&iacute;nea del metro o punto a convenir en CDMX.</p>
+                <div style="background: #fff; padding: 10px; border-radius: 8px; border: 1px solid #e6dec5; font-size: 12px; margin-bottom: 10px;">
+                    <b>&#128666; Entrega:</b> Personal en alguna l&iacute;nea del metro o punto a convenir en CDMX.
                 </div>
-
-                <button type="button" id="btnCheckoutWA" class="w-full bg-[#25D366] text-white py-3 rounded-xl font-bold hover:bg-[#20ba5a] transition flex items-center justify-center space-x-2 shadow">
-                    <span>&#128172;</span>
-                    <span>Finalizar Pedido por WhatsApp</span>
+                <button type="button" class="btn btn-whatsapp" onclick="enviarPedidoWhatsApp()">
+                    &#128172; Finalizar Pedido por WhatsApp
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- DATOS SEMILLA (Se actualizan al exportar para GitHub) -->
+    <!-- DATOS GUARDADOS PARA GITHUB -->
     <script id="initialSeedData">
         window.SEED_PRODUCTS = [];
         window.SEED_BANK = { bank: 'Por definir', clabe: 'Por definir', owner: 'FranCeci' };
     </script>
 
-    <!-- Script Principal con Base de Datos IndexedDB y Multi-Foto -->
+    <!-- LOGICA DIRECTA -->
     <script>
         var products = window.SEED_PRODUCTS || [];
         var bankInfo = window.SEED_BANK || { bank: 'Por definir', clabe: 'Por definir', owner: 'FranCeci' };
         var cart = [];
         var currentFilter = 'todos';
-        var stagedImages = []; // Fotos temporales al crear un producto
-        var currentSlideIndex = {}; // Control del carrusel por producto
+        var stagedImages = [];
+        var slideIndexMap = {};
 
-        // --- BASE DE DATOS DE ALTA CAPACIDAD (IndexedDB) ---
-        var dbPromise = null;
-        function initDB() {
-            if (!window.indexedDB) return Promise.resolve(null);
-            if (dbPromise) return dbPromise;
-            dbPromise = new Promise(function(resolve) {
-                var req = indexedDB.open('FranCeciStoreDB', 1);
+        // Mostrar y ocultar ventanas directamente por estilo inline (infalible)
+        function mostrarVentana(id) {
+            var el = document.getElementById(id);
+            if (el) el.style.display = 'flex';
+        }
+
+        function ocultarVentana(id) {
+            var el = document.getElementById(id);
+            if (el) el.style.display = 'none';
+        }
+
+        // Base de datos IndexedDB + Respaldo LocalStorage
+        function abrirBD(callback) {
+            if (!window.indexedDB) { callback(null); return; }
+            try {
+                var req = indexedDB.open('FranCeciDB_v2', 1);
                 req.onupgradeneeded = function(e) {
                     var db = e.target.result;
-                    if (!db.objectStoreNames.contains('state')) {
-                        db.createObjectStore('state');
-                    }
+                    if (!db.objectStoreNames.contains('store')) db.createObjectStore('store');
                 };
-                req.onsuccess = function(e) { resolve(e.target.result); };
-                req.onerror = function() { resolve(null); };
-            });
-            return dbPromise;
+                req.onsuccess = function(e) { callback(e.target.result); };
+                req.onerror = function() { callback(null); };
+            } catch (err) { callback(null); }
         }
 
-        function dbSave(key, val) {
-            try { localStorage.setItem('franceci_' + key, JSON.stringify(val)); } catch (e) {}
-            return initDB().then(function(db) {
-                if (!db) return;
-                return new Promise(function(resolve) {
-                    var tx = db.transaction('state', 'readwrite');
-                    tx.objectStore('state').put(val, key);
-                    tx.oncomplete = function() { resolve(); };
-                    tx.onerror = function() { resolve(); };
-                });
-            });
-        }
-
-        function dbLoad(key) {
-            return initDB().then(function(db) {
-                if (!db) return null;
-                return new Promise(function(resolve) {
-                    var tx = db.transaction('state', 'readonly');
-                    var req = tx.objectStore('state').get(key);
-                    req.onsuccess = function() { resolve(req.result); };
-                    req.onerror = function() { resolve(null); };
-                });
-            }).then(function(res) {
-                if (res !== undefined && res !== null) return res;
+        function guardarEnMemoria(clave, valor, alTerminar) {
+            try { localStorage.setItem('fc_' + clave, JSON.stringify(valor)); } catch (e) {}
+            abrirBD(function(db) {
+                if (!db) { if (alTerminar) alTerminar(); return; }
                 try {
-                    var ls = localStorage.getItem('franceci_' + key);
-                    if (ls) return JSON.parse(ls);
-                } catch (e) {}
-                return null;
+                    var tx = db.transaction('store', 'readwrite');
+                    tx.objectStore('store').put(valor, clave);
+                    tx.oncomplete = function() { if (alTerminar) alTerminar(); };
+                    tx.onerror = function() { if (alTerminar) alTerminar(); };
+                } catch (e) { if (alTerminar) alTerminar(); }
             });
         }
 
-        // Cargar datos guardados al iniciar
-        function inicializarTienda() {
-            Promise.all([dbLoad('products'), dbLoad('bank')]).then(function(results) {
-                var savedProds = results[0];
-                var savedBank = results[1];
-
-                if (savedProds && Array.isArray(savedProds) && savedProds.length > 0) {
-                    // Combinar con productos semilla por si hay nuevos en el codigo
-                    var map = {};
-                    for (var i = 0; i < savedProds.length; i++) {
-                        map[savedProds[i].id] = savedProds[i];
-                    }
-                    for (var j = 0; j < products.length; j++) {
-                        if (!map[products[j].id]) {
-                            savedProds.push(products[j]);
+        function cargarDeMemoria(clave, callback) {
+            abrirBD(function(db) {
+                if (!db) {
+                    try {
+                        var ls = localStorage.getItem('fc_' + clave);
+                        callback(ls ? JSON.parse(ls) : null);
+                    } catch (e) { callback(null); }
+                    return;
+                }
+                try {
+                    var tx = db.transaction('store', 'readonly');
+                    var req = tx.objectStore('store').get(clave);
+                    req.onsuccess = function() {
+                        if (req.result !== undefined && req.result !== null) {
+                            callback(req.result);
+                        } else {
+                            try {
+                                var ls = localStorage.getItem('fc_' + clave);
+                                callback(ls ? JSON.parse(ls) : null);
+                            } catch (e) { callback(null); }
                         }
-                    }
-                    products = savedProds;
-                }
-
-                if (savedBank && savedBank.bank) {
-                    bankInfo = savedBank;
-                }
-
-                renderProducts();
-                updateCartCount();
+                    };
+                    req.onerror = function() { callback(null); };
+                } catch (e) { callback(null); }
             });
         }
 
-        function abrirModal(id) {
-            var el = document.getElementById(id);
-            if (el) el.classList.add('activa');
-        }
-
-        function cerrarModal(id) {
-            var el = document.getElementById(id);
-            if (el) el.classList.remove('activa');
-        }
-
-        // Botones principales
-        document.getElementById('btnAbrirPublicar').addEventListener('click', function() {
-            abrirModal('uploadModal');
+        // Inicializar datos
+        cargarDeMemoria('products', function(savedProds) {
+            if (savedProds && savedProds.length > 0) {
+                var existentes = {};
+                for (var i = 0; i < savedProds.length; i++) existentes[savedProds[i].id] = true;
+                for (var j = 0; j < products.length; j++) {
+                    if (!existentes[products[j].id]) savedProds.push(products[j]);
+                }
+                products = savedProds;
+            }
+            dibujarCatalogo();
         });
 
-        document.getElementById('btnAbrirBanco').addEventListener('click', function() {
+        cargarDeMemoria('bank', function(savedBank) {
+            if (savedBank && savedBank.bank) bankInfo = savedBank;
+        });
+
+        // Procesar varias fotos con compresion ligera
+        function procesarFotosSeleccionadas(inputEl) {
+            var files = inputEl.files;
+            if (!files || files.length === 0) return;
+
+            var pendientes = files.length;
+            for (var i = 0; i < files.length; i++) {
+                (function(file) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        var img = new Image();
+                        img.onload = function() {
+                            var canvas = document.createElement('canvas');
+                            var max = 700;
+                            var w = img.width;
+                            var h = img.height;
+                            if (w > h && w > max) { h = Math.round(h * max / w); w = max; }
+                            else if (h > max) { w = Math.round(w * max / h); h = max; }
+                            canvas.width = w;
+                            canvas.height = h;
+                            var ctx = canvas.getContext('2d');
+                            ctx.drawImage(img, 0, 0, w, h);
+                            stagedImages.push(canvas.toDataURL('image/jpeg', 0.75));
+                            pendientes--;
+                            if (pendientes === 0) {
+                                inputEl.value = '';
+                                dibujarMiniaturas();
+                            }
+                        };
+                        img.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                })(files[i]);
+            }
+        }
+
+        function dibujarMiniaturas() {
+            var cont = document.getElementById('previewContainer');
+            cont.innerHTML = '';
+            for (var i = 0; i < stagedImages.length; i++) {
+                var div = document.createElement('div');
+                div.className = 'preview-item';
+                div.innerHTML = '<img src="' + stagedImages[i] + '">' +
+                    '<button type="button" class="preview-del" onclick="quitarMiniatura(' + i + ')">&#10005;</button>';
+                cont.appendChild(div);
+            }
+        }
+
+        function quitarMiniatura(idx) {
+            stagedImages.splice(idx, 1);
+            dibujarMiniaturas();
+        }
+
+        function guardarProducto() {
+            var name = document.getElementById('prodName').value.trim();
+            var price = parseFloat(document.getElementById('prodPrice').value);
+            var cat = document.getElementById('prodCategory').value;
+            var desc = document.getElementById('prodDesc').value.trim();
+
+            if (!name || isNaN(price) || price <= 0) {
+                alert('Por favor escribe el nombre y un precio v\u00e1lido.');
+                return;
+            }
+            if (stagedImages.length === 0) {
+                alert('Selecciona al menos una foto para el art\u00edculo.');
+                return;
+            }
+
+            var nuevo = {
+                id: new Date().getTime(),
+                name: name,
+                price: price,
+                category: cat,
+                desc: desc,
+                images: stagedImages.slice(),
+                image: stagedImages[0]
+            };
+
+            products.unshift(nuevo);
+            stagedImages = [];
+            dibujarMiniaturas();
+            document.getElementById('prodName').value = '';
+            document.getElementById('prodPrice').value = '';
+            document.getElementById('prodDesc').value = '';
+            ocultarVentana('uploadModal');
+
+            guardarEnMemoria('products', products, function() {
+                dibujarCatalogo();
+            });
+        }
+
+        function eliminarArticulo(id) {
+            if (!confirm('\u00bfEliminar este art\u00edculo del cat\u00e1logo?')) return;
+            var nuevos = [];
+            for (var i = 0; i < products.length; i++) {
+                if (products[i].id !== id) nuevos.push(products[i]);
+            }
+            products = nuevos;
+            guardarEnMemoria('products', products, function() {
+                dibujarCatalogo();
+            });
+        }
+
+        function cambiarFotoCarrusel(prodId, dir) {
+            var prod = null;
+            for (var i = 0; i < products.length; i++) {
+                if (products[i].id === prodId) { prod = products[i]; break; }
+            }
+            if (!prod) return;
+            var fotos = (prod.images && prod.images.length) ? prod.images : [prod.image];
+            if (fotos.length <= 1) return;
+
+            var actual = slideIndexMap[prodId] || 0;
+            actual = (actual + dir + fotos.length) % fotos.length;
+            slideIndexMap[prodId] = actual;
+
+            var imgTag = document.getElementById('img-' + prodId);
+            var countTag = document.getElementById('cnt-' + prodId);
+            if (imgTag) imgTag.src = fotos[actual];
+            if (countTag) countTag.innerHTML = (actual + 1) + '/' + fotos.length;
+        }
+
+        function filtrarCat(cat) {
+            currentFilter = cat;
+            var ids = ['todos', 'ropa', 'hogar', 'coleccion'];
+            for (var i = 0; i < ids.length; i++) {
+                var b = document.getElementById('f-' + ids[i]);
+                if (b) b.className = (ids[i] === cat) ? 'filter-btn active' : 'filter-btn';
+            }
+            dibujarCatalogo();
+        }
+
+        function dibujarCatalogo() {
+            var grid = document.getElementById('productGrid');
+            var empty = document.getElementById('emptyState');
+            grid.innerHTML = '';
+
+            var lista = [];
+            for (var i = 0; i < products.length; i++) {
+                if (currentFilter === 'todos' || products[i].category === currentFilter) {
+                    lista.push(products[i]);
+                }
+            }
+
+            if (lista.length === 0) {
+                empty.style.display = 'block';
+                return;
+            }
+            empty.style.display = 'none';
+
+            for (var j = 0; j < lista.length; j++) {
+                var p = lista[j];
+                var fotos = (p.images && p.images.length) ? p.images : [p.image];
+                var idx = slideIndexMap[p.id] || 0;
+                if (idx >= fotos.length) idx = 0;
+
+                var flechas = '';
+                if (fotos.length > 1) {
+                    flechas = '<button type="button" class="slide-btn slide-left" onclick="cambiarFotoCarrusel(' + p.id + ', -1)">&#10094;</button>' +
+                              '<button type="button" class="slide-btn slide-right" onclick="cambiarFotoCarrusel(' + p.id + ', 1)">&#10095;</button>' +
+                              '<span id="cnt-' + p.id + '" class="slide-counter">' + (idx + 1) + '/' + fotos.length + '</span>';
+                }
+
+                var card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML =
+                    '<div class="card-img-wrap">' +
+                        '<img id="img-' + p.id + '" src="' + fotos[idx] + '">' +
+                        '<span class="cat-tag">' + p.category + '</span>' +
+                        flechas +
+                    '</div>' +
+                    '<div class="card-body">' +
+                        '<div class="card-title">' + p.name + '</div>' +
+                        '<div class="card-desc">' + p.desc + '</div>' +
+                        '<div class="card-footer">' +
+                            '<span class="price">$' + p.price + ' MXN</span>' +
+                            '<div style="display:flex; gap:6px;">' +
+                                '<button type="button" class="btn btn-primary" style="padding:7px 10px; font-size:12px;" onclick="agregarAlCarrito(' + p.id + ')">&#128722; Comprar</button>' +
+                                '<button type="button" class="btn btn-secondary" style="padding:7px 9px; font-size:12px; color:#c0392b;" onclick="eliminarArticulo(' + p.id + ')">&#128465;</button>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>';
+                grid.appendChild(card);
+            }
+        }
+
+        // Banco y Admin
+        function abrirConfigBanco() {
             document.getElementById('bankNameInput').value = bankInfo.bank !== 'Por definir' ? bankInfo.bank : '';
             document.getElementById('bankClabeInput').value = bankInfo.clabe !== 'Por definir' ? bankInfo.clabe : '';
             document.getElementById('bankOwnerInput').value = bankInfo.owner !== 'FranCeci' ? bankInfo.owner : '';
-            abrirModal('bankModal');
-        });
-
-        document.getElementById('btnAbrirCarrito').addEventListener('click', function() {
-            renderCartItems();
-            abrirModal('cartModal');
-        });
-
-        // Filtros
-        var botonesFiltro = document.querySelectorAll('.filter-btn');
-        for (var i = 0; i < botonesFiltro.length; i++) {
-            botonesFiltro[i].addEventListener('click', function() {
-                currentFilter = this.getAttribute('data-cat');
-                for (var j = 0; j < botonesFiltro.length; j++) {
-                    botonesFiltro[j].className = 'filter-btn px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium bg-[#f4efe6] text-[#5c4033] border border-[#e6dec5] transition';
-                }
-                this.className = 'filter-btn px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium bg-[#5c4033] text-white transition';
-                renderProducts();
-            });
+            mostrarVentana('bankModal');
         }
 
-        // Guardar Banco
-        document.getElementById('btnGuardarBanco').addEventListener('click', function() {
+        function guardarBanco() {
             bankInfo = {
-                bank: document.getElementById('bankNameInput').value || 'Por definir',
-                clabe: document.getElementById('bankClabeInput').value || 'Por definir',
-                owner: document.getElementById('bankOwnerInput').value || 'FranCeci'
+                bank: document.getElementById('bankNameInput').value.trim() || 'Por definir',
+                clabe: document.getElementById('bankClabeInput').value.trim() || 'Por definir',
+                owner: document.getElementById('bankOwnerInput').value.trim() || 'FranCeci'
             };
-            dbSave('bank', bankInfo).then(function() {
-                alert('\u00a1Datos bancarios guardados correctamente!');
-            });
-        });
-
-        // --- MANEJO DE MULTIPLES FOTOS AL SUBIR ---
-        function comprimirImagen(file) {
-            return new Promise(function(resolve) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    var img = new Image();
-                    img.onload = function() {
-                        var canvas = document.createElement('canvas');
-                        var maxDim = 750;
-                        var w = img.width;
-                        var h = img.height;
-                        if (w > h && w > maxDim) { h *= maxDim / w; w = maxDim; }
-                        else if (h > maxDim) { w *= maxDim / h; h = maxDim; }
-                        canvas.width = w;
-                        canvas.height = h;
-                        var ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, w, h);
-                        resolve(canvas.toDataURL('image/jpeg', 0.78));
-                    };
-                    img.src = e.target.result;
-                };
-                reader.readAsDataURL(file);
+            guardarEnMemoria('bank', bankInfo, function() {
+                alert('Datos bancarios guardados.');
+                ocultarVentana('bankModal');
             });
         }
 
-        document.getElementById('prodImageFiles').addEventListener('change', function(e) {
-            var files = Array.from(e.target.files || []);
-            if (files.length === 0) return;
+        // Carrito
+        function agregarAlCarrito(id) {
+            var prod = null;
+            for (var i = 0; i < products.length; i++) {
+                if (products[i].id === id) { prod = products[i]; break; }
+            }
+            if (!prod) return;
+            var imgPrincipal = (prod.images && prod.images.length) ? prod.images[0] : prod.image;
 
-            Promise.all(files.map(comprimirImagen)).then(function(compressedList) {
-                stagedImages = stagedImages.concat(compressedList);
-                renderPreviews();
-                document.getElementById('prodImage
+            var encontrado = false;
+            for (var j = 0; j < cart.length; j++) {
+                if (cart[j].id === id) {
+                    cart[j].qty++;
+                    encontrado = true;
+                    break;
+                }
+            }
+            if (!encontrado) {
+                cart.push({ id: prod.id, name: prod.name, price: prod.price, image: imgPrincipal, qty: 1 });
+            }
+            actualizarContadorCarrito();
+            abrirCarrito();
+        }
+
+        function quitarDelCarrito(idx) {
+            cart.splice(idx, 1);
+            actualizarContadorCarrito();
+            dibujarCarrito();
+        }
+
+        function actualizarContadorCarrito() {
+            var totalQty = 0;
+            for (var i = 0; i < cart.length; i++) totalQty += cart[i].qty;
+            document.getElementById('cartCount').innerHTML = totalQty;
+        }
+
+        function abrirCarrito() {
+            dibujarCarrito();
+            mostrarVentana('cartModal');
+        }
+
+        function dibujarCarrito() {
+            var cont = document.getElementById('cartItemsContainer');
+            var totalEl = document.getElementById('cartTotal');
+            cont.innerHTML = '';
+
+            if (cart.length === 0) {
+                cont.innerHTML = '<p style="text-align:center; color:#6e5a4f; padding:20px;">Tu carrito est&aacute; vac&iacute;o.</p>';
+                totalEl.innerHTML = '$0 MXN';
+                return;
+            }
+
+            var suma = 0;
+            for (var i = 0; i < cart.length; i++) {
+                var item = cart[i];
+                suma += item.price * item.qty;
+                var row = document.createElement('div');
+                row.style.cssText = 'display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #e6dec5;';
+                row.innerHTML =
+                    '<div style="display:flex; align-items:center; gap:10px;">' +
+                        '<img src="' + item.image + '" style="width:45px; height:45px; object-fit:cover; border-radius:6px;">' +
+                        '<div>' +
+                            '<div style="font-size:13px; font-weight:bold; color:#5c4033;">' + item.name + '</div>' +
+                            '<div style="font-size:12px; color:#b85d34;">$' + item.price + ' x ' + item.qty + '</div>' +
+                        '</div>' +
+                    '</div>' +
+                    '<button type="button" class="close-btn" style="width:26px; height:26px; font-size:12px;" onclick="quitarDelCarrito(' + i + ')">&#10005;</button>';
+                cont.appendChild(row);
+            }
+            totalEl.innerHTML = '$' + suma + ' MXN';
+        }
+
+        function enviarPedidoWhatsApp() {
+            if (cart.length === 0) {
+                alert('Agrega primero un art\u00edculo al carrito.');
+                return;
+            }
+            var total = 0;
+            var msg = "Hola FranCeci, quiero realizar el siguiente pedido:\n\n";
+            for (var i = 0; i < cart.length; i++) {
+                var sub = cart[i].price * cart[i].qty;
+                total += sub;
+                msg += "- " + cart[i].name + " (x" + cart[i].qty + "): $" + sub + " MXN\n";
+            }
+            msg += "\nTotal a pagar: $" + total + " MXN\n";
+            msg += "\nDatos para transferencia:\nBanco: " + bankInfo.bank + "\nCLABE/Cuenta: " + bankInfo.clabe + "\nTitular: " + bankInfo.owner + "\n";
+            msg += "\nEntrega: Personal en alguna linea del metro o punto a convenir en CDMX.";
+
+            var url = "https://wa.me/5510803153?text=" + encodeURIComponent(msg);
+            window.open(url, '_blank');
+        }
+
+        // Exportar archivo con productos grabados adentro para GitHub
+        function exportarTiendaCompleta() {
+            ocultarVentana('bankModal');
+            var seedScript = document.getElementById('initialSeedData');
+            seedScript.textContent = '\nwindow.SEED_PRODUCTS = ' + JSON.stringify(products) + ';\nwindow.SEED_BANK = ' + JSON.stringify(bankInfo) + ';\n';
+
+            var contenidoHTML = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+            var blob = new Blob([contenidoHTML], { type: 'text/html;charset=utf-8' });
+            var link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'index.html';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
