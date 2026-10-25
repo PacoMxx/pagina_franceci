@@ -32,12 +32,13 @@
         }
     </script>
     <style>
-        /* Estilos base garantizados para que los modales y botones siempre funcionen */
         body { background-color: #fbf9f5; color: #2c221e; font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; }
-        .ventana-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.6); z-index: 9999; align-items: center; justify-content: center; padding: 16px; overflow-y: auto; }
+        .ventana-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.65); z-index: 9999; align-items: center; justify-content: center; padding: 16px; overflow-y: auto; }
         .ventana-modal.activa { display: flex !important; }
         .oculto { display: none !important; }
         button { cursor: pointer; touch-action: manipulation; }
+        .carrusel-btn { background: rgba(44, 34, 30, 0.75); color: white; width: 30px; height: 30px; border-radius: 9999px; display: flex; align-items: center; justify-content: center; font-weight: bold; transition: background 0.2s; }
+        .carrusel-btn:hover { background: rgba(184, 93, 52, 0.95); }
     </style>
 </head>
 <body class="bg-vintage-bg text-vintage-dark font-sans antialiased min-h-screen flex flex-col">
@@ -53,14 +54,14 @@
                 </div>
             </div>
             
-            <div class="flex items-center space-x-2 sm:space-x-4">
-                <button type="button" id="btnAbrirPublicar" class="bg-[#5c4033] text-white px-3 sm:px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#2c221e] transition flex items-center space-x-1 shadow">
+            <div class="flex items-center space-x-2 sm:space-x-3">
+                <button type="button" id="btnAbrirPublicar" class="bg-[#5c4033] text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium hover:bg-[#2c221e] transition flex items-center space-x-1 shadow">
                     <span>&#10133;</span>
-                    <span class="hidden sm:inline">Publicar Art&iacute;culo</span>
+                    <span class="hidden sm:inline">Publicar</span>
                 </button>
 
-                <button type="button" id="btnAbrirBanco" class="bg-[#e6dec5] text-[#5c4033] px-3 py-2 rounded-lg text-sm font-medium hover:bg-[#d8ceb0] transition" title="Configurar datos bancarios">
-                    &#127974; <span class="hidden md:inline">Banco</span>
+                <button type="button" id="btnAbrirBanco" class="bg-[#e6dec5] text-[#5c4033] px-3 py-2 rounded-lg text-xs sm:text-sm font-medium hover:bg-[#d8ceb0] transition" title="Configurar Banco y Sincronizar con GitHub">
+                    &#9881;&#65039; <span class="hidden md:inline">Admin / Web</span>
                 </button>
 
                 <button type="button" id="btnAbrirCarrito" class="relative bg-[#b85d34] text-white p-2.5 rounded-lg hover:bg-[#a04e2c] transition flex items-center justify-center">
@@ -105,7 +106,7 @@
         <div id="emptyState" class="text-center py-16">
             <span class="text-5xl mb-3 block">&#128230;</span>
             <h4 class="text-lg font-serif font-bold text-[#5c4033]">No hay art&iacute;culos publicados todav&iacute;a</h4>
-            <p class="text-sm text-[#2c221e]/70 mt-1">Usa el bot&oacute;n "Publicar Art&iacute;culo" arriba a la derecha para subir tus productos.</p>
+            <p class="text-sm text-[#2c221e]/70 mt-1">Usa el bot&oacute;n "Publicar" arriba a la derecha para subir tus productos con varias fotos.</p>
         </div>
     </main>
 
@@ -114,9 +115,9 @@
         <p>&copy; 2026 FranCeci &bull; Tienda de Art&iacute;culos de Segunda Mano &bull; CDMX</p>
     </footer>
 
-    <!-- MODAL: Publicar Articulo -->
+    <!-- MODAL: Publicar Articulo (Con soporte multi-foto) -->
     <div id="uploadModal" class="ventana-modal">
-        <div class="bg-[#f4efe6] rounded-2xl max-w-lg w-full p-6 border border-[#e6dec5] shadow-xl my-8">
+        <div class="bg-[#f4efe6] rounded-2xl max-w-lg w-full p-6 border border-[#e6dec5] shadow-xl my-8 max-h-[92vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-4 border-b border-[#e6dec5] pb-3">
                 <h3 class="text-lg font-serif font-bold text-[#5c4033]">Publicar Nuevo Art&iacute;culo</h3>
                 <button type="button" onclick="cerrarModal('uploadModal')" class="text-[#2c221e] hover:text-[#b85d34] font-bold text-xl px-2">&#10005;</button>
@@ -125,13 +126,13 @@
             <form id="productForm" class="space-y-4">
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-wider text-[#5c4033] mb-1">Nombre del Art&iacute;culo</label>
-                    <input type="text" id="prodName" required class="w-full bg-white border border-[#e6dec5] rounded-lg p-2.5 text-sm" placeholder="Ej. Camisa vintage de mezclilla">
+                    <input type="text" id="prodName" required class="w-full bg-white border border-[#e6dec5] rounded-lg p-2.5 text-sm" placeholder="Ej. Chamarra vintage de piel">
                 </div>
                 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-bold uppercase tracking-wider text-[#5c4033] mb-1">Precio ($MXN)</label>
-                        <input type="number" id="prodPrice" required min="1" class="w-full bg-white border border-[#e6dec5] rounded-lg p-2.5 text-sm" placeholder="Ej. 250">
+                        <input type="number" id="prodPrice" required min="1" class="w-full bg-white border border-[#e6dec5] rounded-lg p-2.5 text-sm" placeholder="Ej. 350">
                     </div>
                     <div>
                         <label class="block text-xs font-bold uppercase tracking-wider text-[#5c4033] mb-1">Categor&iacute;a</label>
@@ -145,45 +146,64 @@
 
                 <div>
                     <label class="block text-xs font-bold uppercase tracking-wider text-[#5c4033] mb-1">Descripci&oacute;n y Detalles</label>
-                    <textarea id="prodDesc" rows="3" required class="w-full bg-white border border-[#e6dec5] rounded-lg p-2.5 text-sm" placeholder="Condiciones del art&iacute;culo, talla, detalles..."></textarea>
+                    <textarea id="prodDesc" rows="3" required class="w-full bg-white border border-[#e6dec5] rounded-lg p-2.5 text-sm" placeholder="Condiciones del art&iacute;culo, medidas, talla..."></textarea>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-[#5c4033] mb-1">Fotograf&iacute;a del Art&iacute;culo</label>
-                    <input type="file" id="prodImageFile" accept="image/*" required class="w-full text-xs text-[#2c221e] bg-white p-2 rounded-lg border border-[#e6dec5]">
-                    <p class="text-[11px] text-[#2c221e]/60 mt-1">Sube una foto desde tu galer&iacute;a o c&aacute;mara.</p>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-[#5c4033] mb-1">Fotograf&iacute;as (Puedes subir varias)</label>
+                    <input type="file" id="prodImageFiles" accept="image/*" multiple class="w-full text-xs text-[#2c221e] bg-white p-2 rounded-lg border border-[#e6dec5]">
+                    <p class="text-[11px] text-[#2c221e]/70 mt-1">&#128248; Selecciona una o varias fotos a la vez (o ve agreg&aacute;ndolas una por una).</p>
+                    
+                    <!-- Previsualizacion de fotos seleccionadas -->
+                    <div id="previewContainer" class="grid grid-cols-4 gap-2 mt-3"></div>
                 </div>
 
-                <button type="submit" class="w-full bg-[#b85d34] text-white py-3 rounded-xl font-bold hover:bg-[#a04e2c] transition shadow">
-                    Publicar en FranCeci
+                <button type="submit" id="btnSubmitProd" class="w-full bg-[#b85d34] text-white py-3 rounded-xl font-bold hover:bg-[#a04e2c] transition shadow">
+                    Guardar y Publicar Art&iacute;culo
                 </button>
             </form>
         </div>
     </div>
 
-    <!-- MODAL: Configurar Datos Bancarios -->
+    <!-- MODAL: Admin, Banco y Sincronizacion GitHub -->
     <div id="bankModal" class="ventana-modal">
-        <div class="bg-[#f4efe6] rounded-2xl max-w-md w-full p-6 border border-[#e6dec5] shadow-xl">
+        <div class="bg-[#f4efe6] rounded-2xl max-w-md w-full p-6 border border-[#e6dec5] shadow-xl max-h-[92vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-4 border-b border-[#e6dec5] pb-3">
-                <h3 class="text-lg font-serif font-bold text-[#5c4033]">Configurar Cuenta Bancaria</h3>
+                <h3 class="text-lg font-serif font-bold text-[#5c4033]">Panel de Administraci&oacute;n</h3>
                 <button type="button" onclick="cerrarModal('bankModal')" class="text-[#2c221e] hover:text-[#b85d34] font-bold text-xl px-2">&#10005;</button>
             </div>
-            <p class="text-xs text-[#2c221e]/80 mb-4">Ingresa tus datos para que aparezcan cuando un cliente te compre por transferencia bancaria.</p>
-            <div class="space-y-3">
-                <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-[#5c4033] mb-1">Banco</label>
-                    <input type="text" id="bankNameInput" class="w-full bg-white border border-[#e6dec5] rounded-lg p-2 text-sm" placeholder="Ej. BBVA / Santander / Nu">
+
+            <!-- Seccion 1: Datos Bancarios -->
+            <div class="mb-6">
+                <h4 class="text-xs font-bold uppercase tracking-wider text-[#b85d34] mb-2">&#127974; 1. Cuenta para Transferencias</h4>
+                <div class="space-y-3 bg-white/60 p-3 rounded-xl border border-[#e6dec5]">
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase text-[#5c4033] mb-1">Banco</label>
+                        <input type="text" id="bankNameInput" class="w-full bg-white border border-[#e6dec5] rounded-lg p-2 text-sm" placeholder="Ej. BBVA / Nu / Santander">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase text-[#5c4033] mb-1">CLABE o Tarjeta</label>
+                        <input type="text" id="bankClabeInput" class="w-full bg-white border border-[#e6dec5] rounded-lg p-2 text-sm" placeholder="18 d&iacute;gitos o 16 de tarjeta">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase text-[#5c4033] mb-1">Nombre del Titular</label>
+                        <input type="text" id="bankOwnerInput" class="w-full bg-white border border-[#e6dec5] rounded-lg p-2 text-sm" placeholder="Nombre completo">
+                    </div>
+                    <button type="button" id="btnGuardarBanco" class="w-full bg-[#5c4033] text-white py-2 rounded-lg font-bold text-xs hover:bg-[#2c221e] transition">
+                        Guardar Datos Bancarios
+                    </button>
                 </div>
-                <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-[#5c4033] mb-1">CLABE o Tarjeta</label>
-                    <input type="text" id="bankClabeInput" class="w-full bg-white border border-[#e6dec5] rounded-lg p-2 text-sm" placeholder="012345678901234567">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-[#5c4033] mb-1">Nombre del Titular</label>
-                    <input type="text" id="bankOwnerInput" class="w-full bg-white border border-[#e6dec5] rounded-lg p-2 text-sm" placeholder="Nombre completo">
-                </div>
-                <button type="button" id="btnGuardarBanco" class="w-full bg-[#5c4033] text-white py-2.5 rounded-lg font-bold text-sm hover:bg-[#2c221e] transition mt-2">
-                    Guardar Datos Bancarios
+            </div>
+
+            <!-- Seccion 2: Publicar para todos en GitHub -->
+            <div class="border-t border-[#e6dec5] pt-4">
+                <h4 class="text-xs font-bold uppercase tracking-wider text-[#b85d34] mb-1">&#9729;&#65039; 2. Hacer visible en otros celulares (GitHub)</h4>
+                <p class="text-xs text-[#2c221e]/80 mb-3">
+                    Tus art&iacute;culos ya se guardan autom&aacute;ticamente en este dispositivo. Si quieres que tus clientes los vean al entrar a tu link de GitHub desde sus propios celulares, descarga tu p&aacute;gina actualizada aqu&iacute; y s&uacute;bela a tu repositorio:
+                </p>
+                <button type="button" id="btnExportarHTML" class="w-full bg-[#b85d34] text-white py-3 rounded-xl font-bold text-xs sm:text-sm hover:bg-[#a04e2c] transition shadow flex items-center justify-center space-x-2">
+                    <span>&#128190;</span>
+                    <span>Descargar index.html con mis Art&iacute;culos</span>
                 </button>
             </div>
         </div>
@@ -218,20 +238,99 @@
         </div>
     </div>
 
-    <!-- Script Principal -->
-    <script>
-        var products = [];
-        var cart = [];
-        var bankInfo = { bank: 'Por definir', clabe: 'Por definir', owner: 'FranCeci' };
-        var currentFilter = 'todos';
+    <!-- DATOS SEMILLA (Se actualizan al exportar para GitHub) -->
+    <script id="initialSeedData">
+        window.SEED_PRODUCTS = [];
+        window.SEED_BANK = { bank: 'Por definir', clabe: 'Por definir', owner: 'FranCeci' };
+    </script>
 
-        try {
-            var savedProds = localStorage.getItem('franceci_products');
-            if (savedProds) products = JSON.parse(savedProds);
-            var savedBank = localStorage.getItem('franceci_bank');
-            if (savedBank) bankInfo = JSON.parse(savedBank);
-        } catch (e) {
-            console.log('Almacenamiento local restringido');
+    <!-- Script Principal con Base de Datos IndexedDB y Multi-Foto -->
+    <script>
+        var products = window.SEED_PRODUCTS || [];
+        var bankInfo = window.SEED_BANK || { bank: 'Por definir', clabe: 'Por definir', owner: 'FranCeci' };
+        var cart = [];
+        var currentFilter = 'todos';
+        var stagedImages = []; // Fotos temporales al crear un producto
+        var currentSlideIndex = {}; // Control del carrusel por producto
+
+        // --- BASE DE DATOS DE ALTA CAPACIDAD (IndexedDB) ---
+        var dbPromise = null;
+        function initDB() {
+            if (!window.indexedDB) return Promise.resolve(null);
+            if (dbPromise) return dbPromise;
+            dbPromise = new Promise(function(resolve) {
+                var req = indexedDB.open('FranCeciStoreDB', 1);
+                req.onupgradeneeded = function(e) {
+                    var db = e.target.result;
+                    if (!db.objectStoreNames.contains('state')) {
+                        db.createObjectStore('state');
+                    }
+                };
+                req.onsuccess = function(e) { resolve(e.target.result); };
+                req.onerror = function() { resolve(null); };
+            });
+            return dbPromise;
+        }
+
+        function dbSave(key, val) {
+            try { localStorage.setItem('franceci_' + key, JSON.stringify(val)); } catch (e) {}
+            return initDB().then(function(db) {
+                if (!db) return;
+                return new Promise(function(resolve) {
+                    var tx = db.transaction('state', 'readwrite');
+                    tx.objectStore('state').put(val, key);
+                    tx.oncomplete = function() { resolve(); };
+                    tx.onerror = function() { resolve(); };
+                });
+            });
+        }
+
+        function dbLoad(key) {
+            return initDB().then(function(db) {
+                if (!db) return null;
+                return new Promise(function(resolve) {
+                    var tx = db.transaction('state', 'readonly');
+                    var req = tx.objectStore('state').get(key);
+                    req.onsuccess = function() { resolve(req.result); };
+                    req.onerror = function() { resolve(null); };
+                });
+            }).then(function(res) {
+                if (res !== undefined && res !== null) return res;
+                try {
+                    var ls = localStorage.getItem('franceci_' + key);
+                    if (ls) return JSON.parse(ls);
+                } catch (e) {}
+                return null;
+            });
+        }
+
+        // Cargar datos guardados al iniciar
+        function inicializarTienda() {
+            Promise.all([dbLoad('products'), dbLoad('bank')]).then(function(results) {
+                var savedProds = results[0];
+                var savedBank = results[1];
+
+                if (savedProds && Array.isArray(savedProds) && savedProds.length > 0) {
+                    // Combinar con productos semilla por si hay nuevos en el codigo
+                    var map = {};
+                    for (var i = 0; i < savedProds.length; i++) {
+                        map[savedProds[i].id] = savedProds[i];
+                    }
+                    for (var j = 0; j < products.length; j++) {
+                        if (!map[products[j].id]) {
+                            savedProds.push(products[j]);
+                        }
+                    }
+                    products = savedProds;
+                }
+
+                if (savedBank && savedBank.bank) {
+                    bankInfo = savedBank;
+                }
+
+                renderProducts();
+                updateCartCount();
+            });
         }
 
         function abrirModal(id) {
@@ -244,7 +343,7 @@
             if (el) el.classList.remove('activa');
         }
 
-        // Conectar botones principales
+        // Botones principales
         document.getElementById('btnAbrirPublicar').addEventListener('click', function() {
             abrirModal('uploadModal');
         });
@@ -261,7 +360,7 @@
             abrirModal('cartModal');
         });
 
-        // Conectar filtros de categoria
+        // Filtros
         var botonesFiltro = document.querySelectorAll('.filter-btn');
         for (var i = 0; i < botonesFiltro.length; i++) {
             botonesFiltro[i].addEventListener('click', function() {
@@ -281,28 +380,20 @@
                 clabe: document.getElementById('bankClabeInput').value || 'Por definir',
                 owner: document.getElementById('bankOwnerInput').value || 'FranCeci'
             };
-            try { localStorage.setItem('franceci_bank', JSON.stringify(bankInfo)); } catch (e) {}
-            alert('\u00a1Datos bancarios guardados correctamente!');
-            cerrarModal('bankModal');
+            dbSave('bank', bankInfo).then(function() {
+                alert('\u00a1Datos bancarios guardados correctamente!');
+            });
         });
 
-        // Subir producto con compresion automatica de imagen para no saturar memoria
-        document.getElementById('productForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            var name = document.getElementById('prodName').value;
-            var price = parseFloat(document.getElementById('prodPrice').value);
-            var category = document.getElementById('prodCategory').value;
-            var desc = document.getElementById('prodDesc').value;
-            var fileInput = document.getElementById('prodImageFile');
-
-            var file = fileInput.files[0];
-            if (file) {
+        // --- MANEJO DE MULTIPLES FOTOS AL SUBIR ---
+        function comprimirImagen(file) {
+            return new Promise(function(resolve) {
                 var reader = new FileReader();
                 reader.onload = function(e) {
                     var img = new Image();
                     img.onload = function() {
                         var canvas = document.createElement('canvas');
-                        var maxDim = 800;
+                        var maxDim = 750;
                         var w = img.width;
                         var h = img.height;
                         if (w > h && w > maxDim) { h *= maxDim / w; w = maxDim; }
@@ -311,183 +402,19 @@
                         canvas.height = h;
                         var ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, w, h);
-                        var compressedDataUrl = canvas.toDataURL('image/jpeg', 0.8);
-
-                        var newProduct = {
-                            id: Date.now(),
-                            name: name,
-                            price: price,
-                            category: category,
-                            desc: desc,
-                            image: compressedDataUrl
-                        };
-                        products.unshift(newProduct);
-                        saveAndRefresh();
-                        cerrarModal('uploadModal');
-                        document.getElementById('productForm').reset();
+                        resolve(canvas.toDataURL('image/jpeg', 0.78));
                     };
                     img.src = e.target.result;
                 };
                 reader.readAsDataURL(file);
-            }
-        });
-
-        function saveAndRefresh() {
-            try { localStorage.setItem('franceci_products', JSON.stringify(products)); } catch (e) {}
-            renderProducts();
+            });
         }
 
-        window.deleteProduct = function(id) {
-            if (confirm('\u00bfEst\u00e1s seguro de eliminar este art\u00edculo?')) {
-                products = products.filter(function(p) { return p.id !== id; });
-                saveAndRefresh();
-            }
-        };
+        document.getElementById('prodImageFiles').addEventListener('change', function(e) {
+            var files = Array.from(e.target.files || []);
+            if (files.length === 0) return;
 
-        window.addToCart = function(id) {
-            var product = null;
-            for (var i = 0; i < products.length; i++) {
-                if (products[i].id === id) { product = products[i]; break; }
-            }
-            if (!product) return;
-
-            var existing = null;
-            for (var j = 0; j < cart.length; j++) {
-                if (cart[j].id === id) { existing = cart[j]; break; }
-            }
-            if (existing) {
-                existing.qty++;
-            } else {
-                cart.push({ id: product.id, name: product.name, price: product.price, image: product.image, qty: 1 });
-            }
-            updateCartCount();
-            abrirModal('cartModal');
-        };
-
-        window.removeFromCart = function(index) {
-            cart.splice(index, 1);
-            updateCartCount();
-        };
-
-        function updateCartCount() {
-            var count = 0;
-            for (var i = 0; i < cart.length; i++) { count += cart[i].qty; }
-            document.getElementById('cartCount').innerText = count;
-            renderCartItems();
-        }
-
-        function renderProducts() {
-            var grid = document.getElementById('productGrid');
-            var emptyState = document.getElementById('emptyState');
-            grid.innerHTML = '';
-
-            var filtered = [];
-            for (var i = 0; i < products.length; i++) {
-                if (currentFilter === 'todos' || products[i].category === currentFilter) {
-                    filtered.push(products[i]);
-                }
-            }
-
-            if (filtered.length === 0) {
-                emptyState.classList.remove('oculto');
-                return;
-            } else {
-                emptyState.classList.add('oculto');
-            }
-
-            for (var j = 0; j < filtered.length; j++) {
-                var product = filtered[j];
-                var card = document.createElement('div');
-                card.className = 'bg-[#f4efe6] rounded-xl overflow-hidden border border-[#e6dec5] shadow-sm flex flex-col justify-between hover:shadow-md transition';
-                card.innerHTML = 
-                    '<div class="relative h-48 bg-[#e6dec5] overflow-hidden">' +
-                        '<img src="' + product.image + '" alt="' + product.name + '" class="w-full h-full object-cover">' +
-                        '<span class="absolute top-2 right-2 bg-[#2c221e]/80 text-white text-[10px] uppercase font-bold px-2 py-1 rounded">' +
-                            product.category +
-                        '</span>' +
-                    '</div>' +
-                    '<div class="p-4 flex flex-col flex-grow">' +
-                        '<h4 class="font-serif font-bold text-[#5c4033] text-base mb-1">' + product.name + '</h4>' +
-                        '<p class="text-xs text-[#2c221e]/80 mb-3 flex-grow">' + product.desc + '</p>' +
-                        '<div class="flex items-center justify-between mt-2 pt-2 border-t border-[#e6dec5]">' +
-                            '<span class="font-bold text-[#b85d34] text-lg">$' + product.price + ' MXN</span>' +
-                            '<div class="flex space-x-1">' +
-                                '<button type="button" onclick="addToCart(' + product.id + ')" class="bg-[#5c4033] text-white text-xs px-3 py-1.5 rounded-lg hover:bg-[#2c221e] transition">' +
-                                    '&#128722; Comprar' +
-                                '</button>' +
-                                '<button type="button" onclick="deleteProduct(' + product.id + ')" class="bg-red-100 text-red-700 text-xs px-2 py-1.5 rounded-lg hover:bg-red-200 transition" title="Eliminar">' +
-                                    '&#128465;&#65039;' +
-                                '</button>' +
-                            '</div>' +
-                        '</div>' +
-                    '</div>';
-                grid.appendChild(card);
-            }
-        }
-
-        function renderCartItems() {
-            var container = document.getElementById('cartItemsContainer');
-            var totalEl = document.getElementById('cartTotal');
-            container.innerHTML = '';
-
-            if (cart.length === 0) {
-                container.innerHTML = '<p class="text-center text-sm text-[#2c221e]/60 py-6">Tu carrito est&aacute; vac&iacute;o</p>';
-                totalEl.innerText = '$0 MXN';
-                return;
-            }
-
-            var total = 0;
-            for (var i = 0; i < cart.length; i++) {
-                var item = cart[i];
-                total += item.price * item.qty;
-                var div = document.createElement('div');
-                div.className = 'flex justify-between items-center py-2';
-                div.innerHTML = 
-                    '<div class="flex items-center space-x-3">' +
-                        '<img src="' + item.image + '" class="w-12 h-12 object-cover rounded-lg border border-[#e6dec5]">' +
-                        '<div>' +
-                            '<h5 class="text-xs font-bold text-[#5c4033]">' + item.name + '</h5>' +
-                            '<p class="text-xs text-[#b85d34] font-semibold">$' + item.price + ' x ' + item.qty + '</p>' +
-                        '</div>' +
-                    '</div>' +
-                    '<button type="button" onclick="removeFromCart(' + i + ')" class="text-red-500 hover:text-red-700 text-xs px-2 py-1">&#10060;</button>';
-                container.appendChild(div);
-            }
-
-            totalEl.innerText = '$' + total + ' MXN';
-        }
-
-        // Checkout WhatsApp
-        document.getElementById('btnCheckoutWA').addEventListener('click', function() {
-            if (cart.length === 0) {
-                alert('Agrega al menos un producto al carrito antes de finalizar tu pedido.');
-                return;
-            }
-
-            var total = 0;
-            var message = "Hola FranCeci \ud83d\udc4b, quiero realizar el siguiente pedido:\n\n";
-            
-            for (var i = 0; i < cart.length; i++) {
-                var item = cart[i];
-                var subtotal = item.price * item.qty;
-                total += subtotal;
-                message += "\u25aa\ufe0f " + item.name + " (x" + item.qty + ") - $" + subtotal + " MXN\n";
-            }
-
-            message += "\n\ud83d\udcb0 Total a pagar: $" + total + " MXN\n\n";
-            message += "\ud83c\udfe6 Datos para transferencia:\n- Banco: " + bankInfo.bank + "\n- CLABE: " + bankInfo.clabe + "\n- Titular: " + bankInfo.owner + "\n\n";
-            message += "\ud83d\udccd Entrega: Acordar entrega personal en l\u00ednea del metro o punto a convenir en CDMX.\n\nQuedo atento(a) para coordinar el pago y la entrega. \u00a1Gracias!";
-
-            var encodedMessage = encodeURIComponent(message);
-            var whatsappNumber = "5510803153";
-            var url = "https://wa.me/" + whatsappNumber + "?text=" + encodedMessage;
-            
-            window.open(url, '_blank');
-        });
-
-        // Inicializar al cargar
-        renderProducts();
-        updateCartCount();
-    </script>
-</body>
-</html>
+            Promise.all(files.map(comprimirImagen)).then(function(compressedList) {
+                stagedImages = stagedImages.concat(compressedList);
+                renderPreviews();
+                document.getElementById('prodImage
