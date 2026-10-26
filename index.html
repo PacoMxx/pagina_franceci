@@ -532,4 +532,168 @@
                     '<div class="card-body">' +
                         '<div class="card-title">' + p.name + '</div>' +
                         '<div class="card-desc">' + p.desc + '</div>' +
-                        '<div class="card-footer
+                        '<div class="card-footer">' +
+                            '<span class="price">$' + p.price + ' MXN</span>' +
+                            '<div style="display:flex; gap:6px;">' +
+                                '<button type="button" class="btn btn-primary" style="padding:7px 10px; font-size:12px;" onclick="agregarAlCarrito(' + p.id + ')">&#128722; Comprar</button>' +
+                                '<button type="button" class="btn btn-secondary" style="padding:7px 9px; font-size:12px; color:#c0392b;" onclick="eliminarArticulo(' + p.id + ')">&#128465;</button>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>';
+                grid.appendChild(card);
+            }
+        }
+
+        function abrirConfigAdmin() {
+            document.getElementById('googleScriptUrlInput').value = googleUrl;
+            document.getElementById('adminPassConfig').value = savedAdminPass;
+            document.getElementById('bankNameInput').value = bankInfo.bank !== 'Por definir' ? bankInfo.bank : '';
+            document.getElementById('bankClabeInput').value = bankInfo.clabe !== 'Por definir' ? bankInfo.clabe : '';
+            document.getElementById('bankOwnerInput').value = bankInfo.owner !== 'FranCeci' ? bankInfo.owner : '';
+            mostrarVentana('bankModal');
+        }
+
+        function guardarConexionGoogle() {
+            var nuevaUrl = document.getElementById('googleScriptUrlInput').value.trim();
+            if (nuevaUrl) googleUrl = nuevaUrl;
+            savedAdminPass = document.getElementById('adminPassConfig').value.trim();
+            localStorage.setItem('fc_google_url', googleUrl);
+            localStorage.setItem('fc_admin_pass', savedAdminPass);
+            alert('Enlace actualizado. Sincronizando cat\u00e1logo...');
+            ocultarVentana('bankModal');
+            sincronizarDesdeGoogle();
+        }
+
+        function guardarBanco() {
+            var pass = document.getElementById('adminPassConfig').value.trim() || savedAdminPass;
+            if (!pass) {
+                alert('Escribe tu contrase\u00f1a de administrador arriba (ej. franceci2026).');
+                return;
+            }
+            savedAdminPass = pass;
+            localStorage.setItem('fc_admin_pass', pass);
+
+            var nuevoBanco = {
+                bank: document.getElementById('bankNameInput').value.trim() || 'Por definir',
+                clabe: document.getElementById('bankClabeInput').value.trim() || 'Por definir',
+                owner: document.getElementById('bankOwnerInput').value.trim() || 'FranCeci'
+            };
+
+            var btn = document.getElementById('btnGuardarBanco');
+            btn.disabled = true;
+            btn.innerHTML = 'Guardando en Google...';
+
+            fetch(googleUrl, {
+                method: 'POST',
+                redirect: 'follow',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({ action: 'bank', pass: pass, bank: nuevoBanco })
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(res) {
+                btn.disabled = false;
+                btn.innerHTML = '&#128190; Guardar Cuenta Bancaria en la Nube';
+                if (!res.ok) { alert('Contrase\u00f1a incorrecta'); return; }
+                bankInfo = nuevoBanco;
+                alert('\u00a1Datos bancarios guardados en la nube para todos los clientes!');
+                ocultarVentana('bankModal');
+            })
+            .catch(function() {
+                btn.disabled = false;
+                btn.innerHTML = '&#128190; Guardar Cuenta Bancaria en la Nube';
+                alert('Error al conectar con Google Sheets.');
+            });
+        }
+
+        function agregarAlCarrito(id) {
+            var prod = null;
+            for (var i = 0; i < products.length; i++) {
+                if (products[i].id === id) { prod = products[i]; break; }
+            }
+            if (!prod) return;
+            var imgPrincipal = (prod.images && prod.images.length) ? prod.images[0] : prod.image;
+
+            var encontrado = false;
+            for (var j = 0; j < cart.length; j++) {
+                if (cart[j].id === id) { cart[j].qty++; encontrado = true; break; }
+            }
+            if (!encontrado) {
+                cart.push({ id: prod.id, name: prod.name, price: prod.price, image: imgPrincipal, qty: 1 });
+            }
+            actualizarContadorCarrito();
+            abrirCarrito();
+        }
+
+        function quitarDelCarrito(idx) {
+            cart.splice(idx, 1);
+            actualizarContadorCarrito();
+            dibujarCarrito();
+        }
+
+        function actualizarContadorCarrito() {
+            var totalQty = 0;
+            for (var i = 0; i < cart.length; i++) totalQty += cart[i].qty;
+            document.getElementById('cartCount').innerHTML = totalQty;
+        }
+
+        function abrirCarrito() {
+            dibujarCarrito();
+            mostrarVentana('cartModal');
+        }
+
+        function dibujarCarrito() {
+            var cont = document.getElementById('cartItemsContainer');
+            var totalEl = document.getElementById('cartTotal');
+            cont.innerHTML = '';
+
+            if (cart.length === 0) {
+                cont.innerHTML = '<p style="text-align:center; color:#6e5a4f; padding:20px;">Tu carrito est&aacute; vac&iacute;o.</p>';
+                totalEl.innerHTML = '$0 MXN';
+                return;
+            }
+
+            var suma = 0;
+            for (var i = 0; i < cart.length; i++) {
+                var item = cart[i];
+                suma += item.price * item.qty;
+                var row = document.createElement('div');
+                row.style.cssText = 'display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #e6dec5;';
+                row.innerHTML =
+                    '<div style="display:flex; align-items:center; gap:10px;">' +
+                        '<img src="' + item.image + '" style="width:45px; height:45px; object-fit:cover; border-radius:6px;">' +
+                        '<div>' +
+                            '<div style="font-size:13px; font-weight:bold; color:#5c4033;">' + item.name + '</div>' +
+                            '<div style="font-size:12px; color:#b85d34;">$' + item.price + ' x ' + item.qty + '</div>' +
+                        '</div>' +
+                    '</div>' +
+                    '<button type="button" class="close-btn" style="width:26px; height:26px; font-size:12px;" onclick="quitarDelCarrito(' + i + ')">&#10005;</button>';
+                cont.appendChild(row);
+            }
+            totalEl.innerHTML = '$' + suma + ' MXN';
+        }
+
+        function enviarPedidoWhatsApp() {
+            if (cart.length === 0) {
+                alert('Agrega primero un art\u00edculo al carrito.');
+                return;
+            }
+            var total = 0;
+            var msg = "Hola FranCeci, quiero realizar el siguiente pedido:\n\n";
+            for (var i = 0; i < cart.length; i++) {
+                var sub = cart[i].price * cart[i].qty;
+                total += sub;
+                msg += "- " + cart[i].name + " (x" + cart[i].qty + "): $" + sub + " MXN\n";
+            }
+            msg += "\nTotal a pagar: $" + total + " MXN\n";
+            msg += "\nDatos para transferencia:\nBanco: " + bankInfo.bank + "\nCLABE/Cuenta: " + bankInfo.clabe + "\nTitular: " + bankInfo.owner + "\n";
+            msg += "\nEntrega: Personal en alguna linea del metro o punto a convenir en CDMX.";
+
+            var url = "https://wa.me/5510803153?text=" + encodeURIComponent(msg);
+            window.open(url, '_blank');
+        }
+
+        // Conectar automaticamente al abrir la tienda
+        sincronizarDesdeGoogle();
+    </script>
+</body>
+</html>
