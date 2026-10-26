@@ -31,7 +31,6 @@
 
         main { max-width: 1100px; width: 100%; margin: 0 auto; padding: 26px 16px; flex: 1; }
         
-        /* Controles de Busqueda y Orden */
         .search-sort-bar { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; align-items: center; justify-content: space-between; }
         .search-input { flex: 1; min-width: 220px; padding: 9px 12px; border-radius: 8px; border: 1px solid #e6dec5; background: #fff; font-size: 13px; }
         .sort-select { padding: 9px 12px; border-radius: 8px; border: 1px solid #e6dec5; background: #fff; font-size: 13px; color: #5c4033; font-weight: bold; }
@@ -47,11 +46,10 @@
         .card-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
         .cat-tag { position: absolute; top: 8px; left: 8px; background: rgba(44,34,30,0.85); color: #fff; font-size: 10px; text-transform: uppercase; padding: 4px 8px; border-radius: 4px; font-weight: bold; }
         
-        /* Etiquetas de estado dinamicas */
         .status-tag { position: absolute; top: 8px; right: 8px; font-size: 10px; text-transform: uppercase; padding: 4px 8px; border-radius: 4px; font-weight: bold; z-index: 4; }
         .status-disponible { background: #27ae60; color: #fff; }
         .status-apartado { background: #d35400; color: #fff; }
-        .status- trato { background: #2980b9; color: #fff; }
+        .status-trato { background: #2980b9; color: #fff; }
 
         .slide-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(44,34,30,0.8); color: #fff; border: none; width: 30px; height: 30px; border-radius: 50%; font-size: 13px; font-weight: bold; cursor: pointer; z-index: 5; }
         .slide-left { left: 8px; }
@@ -89,7 +87,6 @@
         .delivery-option:hover { background: #fbf9f5; border-color: #e6dec5; }
         .delivery-option input { margin-top: 3px; accent-color: #5c4033; }
 
-        /* Zoom modal para fotos */
         .zoom-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 99999; justify-content: center; align-items: center; padding: 20px; }
         .zoom-overlay img { max-width: 100%; max-height: 90vh; object-fit: contain; border-radius: 8px; }
 
@@ -159,12 +156,11 @@
 
         <div class="pills-wrap sans">
             <div class="pill">&#128647; Entregas personales en alguna l&iacute;nea del metro o punto a convenir</div>
-            <div class="pill">&#128666; Env&iacute;os en el Distrito Federal (costo de env&iacute;o por WhatsApp)</div>
+            <div class="pill">&#128666; Env&iacute;os a domicilio en el DF</div>
         </div>
     </section>
 
     <main class="sans">
-        <!-- BARRA DE BUSQUEDA Y ORDENAR -->
         <div class="search-sort-bar">
             <input type="text" id="searchInput" class="search-input" placeholder="&#128269; Buscar prenda, talla, artículo..." oninput="filtrarCatalogo()">
             <select id="sortSelect" class="sort-select" onchange="filtrarCatalogo()">
@@ -196,7 +192,6 @@
         </div>
     </main>
 
-    <!-- ZOOOM DE FOTO EN PANTALLA COMPLETA -->
     <div id="zoomOverlay" class="zoom-overlay" onclick="cerrarZoom()">
         <img id="zoomImg" src="" alt="Zoom">
     </div>
@@ -249,7 +244,7 @@
     <div id="cartModal" class="modal-overlay sans">
         <div class="modal-box">
             <div class="modal-header"><h3>Tu Carrito</h3><button type="button" class="close-btn" onclick="ocultarVentana('cartModal')">&#10005;</button></div>
-            <div id="cartItemsContainer" style="max-height: 200px; overflow-y: auto; margin-bottom: 10px;"></div>
+            <div id="cartItemsContainer" style="max-height: 180px; overflow-y: auto; margin-bottom: 10px;"></div>
             <div style="border-top: 1px solid #e6dec5; padding-top: 10px;">
                 <div id="discountBanner" style="background:#eafaf1; color:#27ae60; padding:6px 10px; border-radius:6px; font-size:11px; font-weight:bold; margin-bottom:8px; display:none;">
                     🎁 ¡Paquete aplicado! 10% de descuento por llevar 2 o más piezas.
@@ -259,15 +254,29 @@
                     <span id="cartTotal" style="color: #b85d34;">$0 MXN</span>
                 </div>
                 
-                <!-- METRO Y HORARIO -->
+                <!-- METRO Y ENVIO A DOMICILIO CON APARTADO DE DIRECCION -->
                 <div style="background: #fff; padding: 10px; border-radius: 8px; border: 1px solid #e6dec5; font-size: 12px; margin-bottom: 10px;">
                     <p style="font-weight: bold; color: #5c4033; margin-bottom: 6px; text-transform: uppercase; font-size: 10px;">&#128666; Método de Entrega:</p>
-                    <label class="delivery-option"><input type="radio" name="metodoEntrega" value="Entrega en Metro CDMX" checked><span><b>Metro CDMX:</b> Línea y horario a acordar</span></label>
-                    <label class="delivery-option" style="margin-bottom:0;"><input type="radio" name="metodoEntrega" value="Envío a domicilio en el DF (cotizar WhatsApp)"><span><b>Envío en el DF:</b> Cotizar costo por WhatsApp</span></label>
                     
-                    <div style="margin-top: 8px;">
+                    <label class="delivery-option" onclick="toggleDireccionEnvio(false)">
+                        <input type="radio" name="metodoEntrega" value="Entrega personal en Metro CDMX" checked>
+                        <span><b>Metro CDMX:</b> Línea y horario a acordar</span>
+                    </label>
+
+                    <label class="delivery-option" onclick="toggleDireccionEnvio(true)" style="margin-bottom:0;">
+                        <input type="radio" name="metodoEntrega" value="Envío a domicilio en el DF">
+                        <span><b>Envío a domicilio en el DF:</b> Cotizar costo por WhatsApp</span>
+                    </label>
+                    
+                    <div id="metroBox" style="margin-top: 8px;">
                         <label style="font-size: 10px; font-weight: bold; color: #5c4033;">Línea de Metro / Estación preferida:</label>
                         <input type="text" id="metroPref" class="form-control" placeholder="Ej. Línea 2, Estación Chabacano" style="padding:6px; font-size:12px; margin-top:2px;">
+                    </div>
+
+                    <!-- APARTADO DE DIRECCION (OCULTO POR DEFECTO) -->
+                    <div id="direccionBox" style="margin-top: 8px; display: none;">
+                        <label style="font-size: 10px; font-weight: bold; color: #b85d34;">Dirección exacta de entrega en el DF:</label>
+                        <textarea id="dirEnvio" class="form-control" rows="2" placeholder="Calle, número exterior/interior, colonia, alcaldía, referencias..." style="padding:6px; font-size:12px; margin-top:2px;"></textarea>
                     </div>
                 </div>
 
@@ -300,6 +309,18 @@
             document.getElementById('zoomOverlay').style.display = 'flex';
         }
         function cerrarZoom() { document.getElementById('zoomOverlay').style.display = 'none'; }
+
+        function toggleDireccionEnvio(esEnvio) {
+            var metroBox = document.getElementById('metroBox');
+            var dirBox = document.getElementById('direccionBox');
+            if (esEnvio) {
+                metroBox.style.display = 'none';
+                dirBox.style.display = 'block';
+            } else {
+                metroBox.style.display = 'block';
+                dirBox.style.display = 'none';
+            }
+        }
 
         function actualizarEstadoNube(texto, color) {
             var badge = document.getElementById('cloudStatus');
@@ -479,7 +500,7 @@
                 var fotos = (p.images && p.images.length) ? p.images : [p.image];
                 var idx = slideIndexMap[p.id] || 0; if (idx >= fotos.length) idx = 0;
                 var st = p.status || 'Disponible';
-                var stClass = st === 'Disponible' ? 'status-disponible' : (st === '⏳ Apartado' ? 'status-apartado' : 'status- trato');
+                var stClass = st === 'Disponible' ? 'status-disponible' : (st === '⏳ Apartado' ? 'status-apartado' : 'status-trato');
 
                 var flechas = '';
                 if (fotos.length > 1) {
@@ -502,7 +523,7 @@
                         '<div class="card-footer">' +
                             '<div class="price-row"><span class="price">$' + p.price + ' MXN</span></div>' +
                             '<div class="actions-row">' +
-                                '<button type="button" class="btn btn-primary" style="flex:1; font-size:11px; padding:6px;" onclick="agregarAlCarrito(' + p.id + ')">&#128722; Comprar</button>' +
+                                '<button type="button" class="btn btn-primary" style="flex:1; font-size:11px; padding:6px;" onclick="agregarAlCarrito(' + p.id + ')">&#128722; Añadir al Carrito</button>' +
                                 '<button type="button" class="btn btn-secondary" style="font-size:11px; padding:6px;" onclick="ofrecerRegateo(\'' + p.name + '\',' + p.price + ')">💬 Oferta</button>' +
                                 '<button type="button" class="btn btn-secondary" style="font-size:11px; padding:6px; color:#c0392b;" onclick="eliminarArticulo(' + p.id + ')">&#128465;</button>' +
                             '</div>' +
@@ -518,7 +539,7 @@
         }
 
         function ofrecerRegateo(nombre, precio) {
-            var msg = "Hola FranCeci, me interesa el artículo *" + nombre + "* (publicado en $" + precio + " MXN). ¿Aceptarías una oferta de $___ si paso por él?";
+            var msg = "Hola FranCeci, me interesa el artículo *" + nombre + "* (publicado en $" + precio + " MXN). ¿Aceptarías una oferta de $___?";
             window.open("https://wa.me/5510803153?text=" + encodeURIComponent(msg), '_blank');
         }
 
@@ -585,7 +606,6 @@
                 cont.appendChild(row);
             }
 
-            // Descuento automatico del 10% si lleva 2 o mas piezas
             if (totalPiezas >= 2) {
                 suma = Math.round(suma * 0.9);
                 banner.style.display = 'block';
@@ -598,9 +618,18 @@
 
         function enviarPedidoWhatsApp() {
             if (cart.length === 0) { alert('Carrito vacío'); return; }
-            var radios = document.getElementsByName('metodoEntrega'); var metodo = "Entrega en Metro CDMX";
+            var radios = document.getElementsByName('metodoEntrega'); var metodo = "Entrega personal en Metro CDMX";
             for (var r = 0; r < radios.length; r++) { if (radios[r].checked) metodo = radios[r].value; }
-            var metroPref = document.getElementById('metroPref').value.trim();
+            
+            var detalleEntrega = "";
+            if (metodo.indexOf("Envío") !== -1) {
+                var direccion = document.getElementById('dirEnvio').value.trim();
+                if (!direccion) { alert('Por favor escribe tu dirección completa para el envío a domicilio.'); return; }
+                detalleEntrega = "Envío a domicilio en el DF\n📍 Dirección: " + direccion;
+            } else {
+                var metroPref = document.getElementById('metroPref').value.trim();
+                detalleEntrega = "Entrega personal en Metro CDMX" + (metroPref ? " (Estación/Línea: " + metroPref + ")" : "");
+            }
 
             var suma = 0; var totalPiezas = 0;
             var msg = "Hola FranCeci, quiero realizar este pedido:\n\n";
@@ -609,7 +638,7 @@
                 msg += "- " + cart[i].name + " (x" + cart[i].qty + "): $" + sub + " MXN\n";
             }
             if (totalPiezas >= 2) { suma = Math.round(suma * 0.9); msg += "\n*(Se aplicó 10% de descuento por paquete)*\n"; }
-            msg += "\nTotal a pagar: $" + suma + " MXN\n\nMétodo: " + metodo + (metroPref ? " (" + metroPref + ")" : "") + "\n\nDatos de pago:\nBanco: " + bankInfo.bank + "\nCLABE/Tarjeta: " + bankInfo.clabe + "\nTitular: " + bankInfo.owner;
+            msg += "\nTotal a pagar en artículos: $" + suma + " MXN\n\nMétodo de entrega:\n" + detalleEntrega + "\n\nDatos de pago:\nBanco: " + bankInfo.bank + "\nCLABE/Tarjeta: " + bankInfo.clabe + "\nTitular: " + bankInfo.owner;
 
             window.open("https://wa.me/5510803153?text=" + encodeURIComponent(msg), '_blank');
         }
