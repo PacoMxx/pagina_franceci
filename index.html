@@ -184,7 +184,7 @@
         </div>
     </div>
 
-    <!-- VENTANA 2: ADMIN, GOOGLE CLOUD Y BANCO -->
+    <!-- VENTANA 2: ADMIN Y BANCO -->
     <div id="bankModal" class="modal-overlay sans">
         <div class="modal-box">
             <div class="modal-header">
@@ -192,21 +192,13 @@
                 <button type="button" class="close-btn" onclick="ocultarVentana('bankModal')">&#10005;</button>
             </div>
 
-            <p style="font-size: 12px; font-weight: bold; color: #b85d34; margin-bottom: 8px;">1. CONEXI&Oacute;N CON GOOGLE SHEETS</p>
-            <div class="form-group">
-                <label>URL de tu App Web de Google Apps Script</label>
-                <input type="url" id="googleScriptUrlInput" class="form-control" placeholder="https://script.google.com/macros/s/.../exec">
-            </div>
             <div class="form-group">
                 <label>Tu Contrase&ntilde;a de Admin</label>
                 <input type="password" id="adminPassConfig" class="form-control" placeholder="Ej. franceci2026">
             </div>
-            <button type="button" class="btn btn-secondary" style="width: 100%; margin-bottom: 18px;" onclick="guardarConexionGoogle()">
-                &#128279; Guardar Conexi&oacute;n en este Dispositivo
-            </button>
 
-            <div style="border-top: 1px solid #e6dec5; padding-top: 14px;">
-                <p style="font-size: 12px; font-weight: bold; color: #b85d34; margin-bottom: 8px;">2. DATOS BANCARIOS PARA TRANSFERENCIAS</p>
+            <div style="border-top: 1px solid #e6dec5; padding-top: 14px; margin-top: 10px;">
+                <p style="font-size: 12px; font-weight: bold; color: #b85d34; margin-bottom: 8px;">DATOS BANCARIOS PARA TRANSFERENCIAS</p>
                 <div class="form-group">
                     <label>Banco</label>
                     <input type="text" id="bankNameInput" class="form-control" placeholder="Ej. BBVA / Nu / Santander">
@@ -219,10 +211,21 @@
                     <label>Nombre del Titular</label>
                     <input type="text" id="bankOwnerInput" class="form-control" placeholder="Tu nombre completo">
                 </div>
-                <button type="button" id="btnGuardarBanco" class="btn btn-primary" style="width: 100%;" onclick="guardarBanco()">
-                    Guardar Cuenta Bancaria en la Nube
+                <button type="button" id="btnGuardarBanco" class="btn btn-primary" style="width: 100%; margin-bottom: 14px;" onclick="guardarBanco()">
+                    &#128190; Guardar Cuenta Bancaria en la Nube
                 </button>
             </div>
+
+            <details style="font-size: 11px; color: #6e5a4f; border-top: 1px solid #e6dec5; padding-top: 10px;">
+                <summary style="cursor: pointer; font-weight: bold;">Configuraci&oacute;n avanzada de enlace Google</summary>
+                <div class="form-group" style="margin-top: 8px;">
+                    <label>URL de Google Apps Script</label>
+                    <input type="url" id="googleScriptUrlInput" class="form-control">
+                </div>
+                <button type="button" class="btn btn-secondary" style="width: 100%;" onclick="guardarConexionGoogle()">
+                    Actualizar Enlace
+                </button>
+            </details>
         </div>
     </div>
 
@@ -252,13 +255,10 @@
     </div>
 
     <script>
-        // =========================================================================
-        // PEGA AQUI ENTRE LAS COMILLAS TU LINK DE GOOGLE APPS SCRIPT PARA QUE
-        // TODOS LOS CELULARES Y COMPUTADORAS SE CONECTEN AUTOMATICAMENTE:
-        // =========================================================================
+        // URL OFICIAL DE TU GOOGLE APPS SCRIPT INTEGRADA:
         var DEFAULT_GOOGLE_URL = "https://script.google.com/macros/s/AKfycbzZutCj1RVk43zgHkar72E3YYCiRN0l1Wkb9iXxdHL-63sSMWmZQq_3bfkkRW3XQnd3/exec"; 
 
-        var googleUrl = localStorage.getItem('fc_google_url') || DEFAULT_GOOGLE_URL;
+        var googleUrl = DEFAULT_GOOGLE_URL;
         var savedAdminPass = localStorage.getItem('fc_admin_pass') || '';
 
         var products = [];
@@ -288,20 +288,9 @@
             if (colorFondo) badge.style.backgroundColor = colorFondo;
         }
 
-        // Cargar productos desde Google Sheets en tiempo real
         function sincronizarDesdeGoogle() {
-            if (!googleUrl) {
-                actualizarEstadoNube('Modo Local (Falta conectar URL de Google en Admin)', '#f5d6c6');
-                try {
-                    var localP = localStorage.getItem('fc_backup_products');
-                    if (localP) products = JSON.parse(localP);
-                } catch(e) {}
-                dibujarCatalogo();
-                return;
-            }
-
-            actualizarEstadoNube('Sincronizando con Google...', '#e6dec5');
-            fetch(googleUrl + '?t=' + new Date().getTime())
+            actualizarEstadoNube('Sincronizando...', '#e6dec5');
+            fetch(googleUrl + '?t=' + new Date().getTime(), { redirect: 'follow' })
                 .then(function(res) { return res.json(); })
                 .then(function(data) {
                     if (data && Array.isArray(data.products)) {
@@ -315,7 +304,7 @@
                     dibujarCatalogo();
                 })
                 .catch(function(err) {
-                    actualizarEstadoNube(' Modo sin conexi&oacute;n', '#f8d7da');
+                    actualizarEstadoNube('Modo local / Reintentando', '#f8d7da');
                     try {
                         var localP = localStorage.getItem('fc_backup_products');
                         if (localP) products = JSON.parse(localP);
@@ -324,7 +313,6 @@
                 });
         }
 
-        // Procesar fotos con compresion optima para Google Sheets (evita limite de 50,000 caracteres por celda)
         function procesarFotosSeleccionadas(inputEl) {
             var files = inputEl.files;
             if (!files || files.length === 0) return;
@@ -337,7 +325,7 @@
                         var img = new Image();
                         img.onload = function() {
                             var canvas = document.createElement('canvas');
-                            var max = 420; // Tamano optimo para guardar varias fotos en una celda de Google Sheets
+                            var max = 420;
                             var w = img.width;
                             var h = img.height;
                             if (w > h && w > max) { h = Math.round(h * max / w); w = max; }
@@ -392,12 +380,8 @@
                 alert('Selecciona al menos una foto para el art\u00edculo.');
                 return;
             }
-            if (!googleUrl) {
-                alert('Primero pega la URL de tu Google Apps Script en el bot\u00f3n Admin.');
-                return;
-            }
             if (!pass) {
-                alert('Ingresa tu contrase\u00f1a de administrador.');
+                alert('Ingresa tu contrase\u00f1a de administrador (por defecto: franceci2026).');
                 return;
             }
 
@@ -416,10 +400,11 @@
 
             var btn = document.getElementById('btnGuardarProd');
             btn.disabled = true;
-            btn.innerHTML = 'Subiendo a Google...';
+            btn.innerHTML = 'Subiendo a Google Sheets...';
 
             fetch(googleUrl, {
                 method: 'POST',
+                redirect: 'follow',
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                 body: JSON.stringify({ action: 'add', pass: pass, product: nuevo })
             })
@@ -443,7 +428,7 @@
             .catch(function() {
                 btn.disabled = false;
                 btn.innerHTML = '&#9729;&#65039; Subir y Publicar en Tiempo Real';
-                alert('Error de conexi\u00f3n al subir a Google Sheets. Verifica tu URL y que hayas elegido "Cualquier usuario" al implementar.');
+                alert('Error de conexi\u00f3n. Verifica que en Apps Script hayas elegido Quien tiene acceso: "Cualquier usuario".');
             });
         }
 
@@ -455,6 +440,7 @@
             actualizarEstadoNube('Eliminando...', '#e6dec5');
             fetch(googleUrl, {
                 method: 'POST',
+                redirect: 'follow',
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                 body: JSON.stringify({ action: 'delete', pass: pass, id: id })
             })
@@ -546,152 +532,4 @@
                     '<div class="card-body">' +
                         '<div class="card-title">' + p.name + '</div>' +
                         '<div class="card-desc">' + p.desc + '</div>' +
-                        '<div class="card-footer">' +
-                            '<span class="price">$' + p.price + ' MXN</span>' +
-                            '<div style="display:flex; gap:6px;">' +
-                                '<button type="button" class="btn btn-primary" style="padding:7px 10px; font-size:12px;" onclick="agregarAlCarrito(' + p.id + ')">&#128722; Comprar</button>' +
-                                '<button type="button" class="btn btn-secondary" style="padding:7px 9px; font-size:12px; color:#c0392b;" onclick="eliminarArticulo(' + p.id + ')">&#128465;</button>' +
-                            '</div>' +
-                        '</div>' +
-                    '</div>';
-                grid.appendChild(card);
-            }
-        }
-
-        function abrirConfigAdmin() {
-            document.getElementById('googleScriptUrlInput').value = googleUrl;
-            document.getElementById('adminPassConfig').value = savedAdminPass;
-            document.getElementById('bankNameInput').value = bankInfo.bank !== 'Por definir' ? bankInfo.bank : '';
-            document.getElementById('bankClabeInput').value = bankInfo.clabe !== 'Por definir' ? bankInfo.clabe : '';
-            document.getElementById('bankOwnerInput').value = bankInfo.owner !== 'FranCeci' ? bankInfo.owner : '';
-            mostrarVentana('bankModal');
-        }
-
-        function guardarConexionGoogle() {
-            googleUrl = document.getElementById('googleScriptUrlInput').value.trim();
-            savedAdminPass = document.getElementById('adminPassConfig').value.trim();
-            localStorage.setItem('fc_google_url', googleUrl);
-            localStorage.setItem('fc_admin_pass', savedAdminPass);
-            alert('Conexi\u00f3n guardada. Sincronizando cat\u00e1logo...');
-            ocultarVentana('bankModal');
-            sincronizarDesdeGoogle();
-        }
-
-        function guardarBanco() {
-            var pass = document.getElementById('adminPassConfig').value.trim() || savedAdminPass;
-            if (!googleUrl || !pass) {
-                alert('Aseg\u00farate de poner la URL de Google y tu contrase\u00f1a arriba.');
-                return;
-            }
-            var nuevoBanco = {
-                bank: document.getElementById('bankNameInput').value.trim() || 'Por definir',
-                clabe: document.getElementById('bankClabeInput').value.trim() || 'Por definir',
-                owner: document.getElementById('bankOwnerInput').value.trim() || 'FranCeci'
-            };
-
-            fetch(googleUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify({ action: 'bank', pass: pass, bank: nuevoBanco })
-            })
-            .then(function(r) { return r.json(); })
-            .then(function(res) {
-                if (!res.ok) { alert('Contrase\u00f1a incorrecta'); return; }
-                bankInfo = nuevoBanco;
-                alert('Datos bancarios actualizados en la nube.');
-                ocultarVentana('bankModal');
-            });
-        }
-
-        function agregarAlCarrito(id) {
-            var prod = null;
-            for (var i = 0; i < products.length; i++) {
-                if (products[i].id === id) { prod = products[i]; break; }
-            }
-            if (!prod) return;
-            var imgPrincipal = (prod.images && prod.images.length) ? prod.images[0] : prod.image;
-
-            var encontrado = false;
-            for (var j = 0; j < cart.length; j++) {
-                if (cart[j].id === id) { cart[j].qty++; encontrado = true; break; }
-            }
-            if (!encontrado) {
-                cart.push({ id: prod.id, name: prod.name, price: prod.price, image: imgPrincipal, qty: 1 });
-            }
-            actualizarContadorCarrito();
-            abrirCarrito();
-        }
-
-        function quitarDelCarrito(idx) {
-            cart.splice(idx, 1);
-            actualizarContadorCarrito();
-            dibujarCarrito();
-        }
-
-        function actualizarContadorCarrito() {
-            var totalQty = 0;
-            for (var i = 0; i < cart.length; i++) totalQty += cart[i].qty;
-            document.getElementById('cartCount').innerHTML = totalQty;
-        }
-
-        function abrirCarrito() {
-            dibujarCarrito();
-            mostrarVentana('cartModal');
-        }
-
-        function dibujarCarrito() {
-            var cont = document.getElementById('cartItemsContainer');
-            var totalEl = document.getElementById('cartTotal');
-            cont.innerHTML = '';
-
-            if (cart.length === 0) {
-                cont.innerHTML = '<p style="text-align:center; color:#6e5a4f; padding:20px;">Tu carrito est&aacute; vac&iacute;o.</p>';
-                totalEl.innerHTML = '$0 MXN';
-                return;
-            }
-
-            var suma = 0;
-            for (var i = 0; i < cart.length; i++) {
-                var item = cart[i];
-                suma += item.price * item.qty;
-                var row = document.createElement('div');
-                row.style.cssText = 'display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #e6dec5;';
-                row.innerHTML =
-                    '<div style="display:flex; align-items:center; gap:10px;">' +
-                        '<img src="' + item.image + '" style="width:45px; height:45px; object-fit:cover; border-radius:6px;">' +
-                        '<div>' +
-                            '<div style="font-size:13px; font-weight:bold; color:#5c4033;">' + item.name + '</div>' +
-                            '<div style="font-size:12px; color:#b85d34;">$' + item.price + ' x ' + item.qty + '</div>' +
-                        '</div>' +
-                    '</div>' +
-                    '<button type="button" class="close-btn" style="width:26px; height:26px; font-size:12px;" onclick="quitarDelCarrito(' + i + ')">&#10005;</button>';
-                cont.appendChild(row);
-            }
-            totalEl.innerHTML = '$' + suma + ' MXN';
-        }
-
-        function enviarPedidoWhatsApp() {
-            if (cart.length === 0) {
-                alert('Agrega primero un art\u00edculo al carrito.');
-                return;
-            }
-            var total = 0;
-            var msg = "Hola FranCeci, quiero realizar el siguiente pedido:\n\n";
-            for (var i = 0; i < cart.length; i++) {
-                var sub = cart[i].price * cart[i].qty;
-                total += sub;
-                msg += "- " + cart[i].name + " (x" + cart[i].qty + "): $" + sub + " MXN\n";
-            }
-            msg += "\nTotal a pagar: $" + total + " MXN\n";
-            msg += "\nDatos para transferencia:\nBanco: " + bankInfo.bank + "\nCLABE/Cuenta: " + bankInfo.clabe + "\nTitular: " + bankInfo.owner + "\n";
-            msg += "\nEntrega: Personal en alguna linea del metro o punto a convenir en CDMX.";
-
-            var url = "https://wa.me/5510803153?text=" + encodeURIComponent(msg);
-            window.open(url, '_blank');
-        }
-
-        // Iniciar sincronizacion al abrir la pagina
-        sincronizarDesdeGoogle();
-    </script>
-</body>
-</html>
+                        '<div class="card-footer
