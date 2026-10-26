@@ -9,37 +9,33 @@
         body { background-color: #fbf9f5; color: #2c221e; font-family: Georgia, 'Times New Roman', serif; min-height: 100vh; display: flex; flex-direction: column; }
         .sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
         
-        /* Barra superior */
         header { background: #f4efe6; border-bottom: 2px solid #e6dec5; position: sticky; top: 0; z-index: 100; padding: 12px 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
         .nav-container { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
         .brand { display: flex; align-items: center; gap: 10px; }
         .brand h1 { font-size: 24px; color: #5c4033; letter-spacing: 0.5px; }
         .brand p { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #b85d34; font-weight: bold; }
         
-        /* Botones */
         .nav-buttons { display: flex; align-items: center; gap: 8px; }
-        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 10px 14px; border-radius: 8px; font-size: 13px; font-weight: bold; border: none; cursor: pointer; text-decoration: none; position: relative; z-index: 10; user-select: none; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 10px 14px; border-radius: 8px; font-size: 13px; font-weight: bold; border: none; cursor: pointer; text-decoration: none; user-select: none; }
         .btn:active { transform: scale(0.96); }
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; }
         .btn-primary { background: #5c4033; color: #ffffff; }
         .btn-secondary { background: #e6dec5; color: #5c4033; border: 1px solid #d2c5a0; }
         .btn-accent { background: #b85d34; color: #ffffff; }
         .btn-whatsapp { background: #25D366; color: #ffffff; width: 100%; padding: 14px; font-size: 15px; border-radius: 10px; margin-top: 10px; }
         .badge-count { background: #2c221e; color: #fff; font-size: 11px; padding: 2px 6px; border-radius: 99px; margin-left: 4px; }
 
-        /* Banner */
         .hero { background: #efe8d8; border-bottom: 1px solid #e6dec5; padding: 28px 16px; text-align: center; }
         .hero h2 { font-size: 24px; color: #5c4033; margin-bottom: 8px; }
         .hero p { font-size: 14px; color: #4a3b34; max-width: 600px; margin: 0 auto 14px; line-height: 1.4; }
         .pill { display: inline-block; background: #fff; border: 1px solid #e6dec5; padding: 6px 14px; border-radius: 99px; font-size: 12px; color: #5c4033; font-weight: bold; }
 
-        /* Contenedor Principal */
         main { max-width: 1100px; width: 100%; margin: 0 auto; padding: 24px 16px; flex: 1; }
         .catalog-header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid #e6dec5; }
         .filters { display: flex; flex-wrap: wrap; gap: 6px; }
         .filter-btn { padding: 7px 14px; border-radius: 99px; font-size: 12px; font-weight: bold; border: 1px solid #e6dec5; background: #f4efe6; color: #5c4033; cursor: pointer; }
         .filter-btn.active { background: #5c4033; color: #fff; border-color: #5c4033; }
 
-        /* Grid de Productos */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
         .card { background: #f4efe6; border: 1px solid #e6dec5; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 2px 5px rgba(0,0,0,0.04); }
         .card-img-wrap { position: relative; height: 220px; background: #e6dec5; overflow: hidden; }
@@ -55,19 +51,16 @@
         .card-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 10px; border-top: 1px solid #e6dec5; }
         .price { font-size: 18px; font-weight: bold; color: #b85d34; }
 
-        /* Estado Vacio */
         .empty-box { text-align: center; padding: 50px 20px; }
         .empty-box h4 { font-size: 18px; color: #5c4033; margin-top: 10px; }
         .empty-box p { font-size: 13px; color: #6e5a4f; margin-top: 6px; }
 
-        /* Ventanas Modales */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.65); z-index: 9999; align-items: center; justify-content: center; padding: 16px; overflow-y: auto; }
         .modal-box { background: #f4efe6; border: 2px solid #e6dec5; border-radius: 16px; max-width: 480px; width: 100%; padding: 20px; max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
         .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e6dec5; padding-bottom: 10px; margin-bottom: 16px; }
         .modal-header h3 { font-size: 18px; color: #5c4033; }
         .close-btn { background: #e6dec5; border: none; width: 32px; height: 32px; border-radius: 50%; font-size: 16px; font-weight: bold; color: #2c221e; cursor: pointer; }
 
-        /* Formularios */
         .form-group { margin-bottom: 14px; }
         .form-group label { display: block; font-size: 11px; font-weight: bold; text-transform: uppercase; color: #5c4033; margin-bottom: 5px; }
         .form-control { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #d2c5a0; background: #fff; font-size: 14px; color: #2c221e; }
@@ -77,12 +70,12 @@
         .preview-item img { width: 100%; height: 100%; object-fit: cover; }
         .preview-del { position: absolute; top: 2px; right: 2px; background: #c0392b; color: #fff; border: none; width: 18px; height: 18px; border-radius: 50%; font-size: 10px; cursor: pointer; }
 
+        .sync-status { font-size: 11px; padding: 4px 10px; border-radius: 99px; background: #e6dec5; color: #5c4033; display: inline-block; margin-left: 8px; }
         footer { background: #f4efe6; border-top: 1px solid #e6dec5; text-align: center; padding: 18px; font-size: 12px; color: #6e5a4f; margin-top: auto; }
     </style>
 </head>
 <body>
 
-    <!-- BARRA DE NAVEGACION -->
     <header>
         <div class="nav-container">
             <div class="brand">
@@ -97,7 +90,7 @@
                 <button type="button" class="btn btn-primary" onclick="mostrarVentana('uploadModal')">
                     &#10133; Publicar
                 </button>
-                <button type="button" class="btn btn-secondary" onclick="abrirConfigBanco()">
+                <button type="button" class="btn btn-secondary" onclick="abrirConfigAdmin()">
                     &#9881;&#65039; Admin
                 </button>
                 <button type="button" class="btn btn-accent" onclick="abrirCarrito()">
@@ -107,17 +100,18 @@
         </div>
     </header>
 
-    <!-- BANNER -->
     <section class="hero">
         <h2>Tesoro y estilo con historia</h2>
         <p class="sans">Art&iacute;culos de segunda mano &uacute;nicos seleccionados con amor. Dale una segunda oportunidad a las cosas y encuentra piezas especiales.</p>
         <div class="pill sans">&#128205; Entregas personales en alguna l&iacute;nea del metro o punto a convenir en CDMX</div>
     </section>
 
-    <!-- CATALOGO -->
     <main class="sans">
         <div class="catalog-header">
-            <h3 style="font-size: 20px; color: #5c4033; font-family: Georgia, serif;">Cat&aacute;logo Disponible</h3>
+            <div>
+                <h3 style="font-size: 20px; color: #5c4033; font-family: Georgia, serif; display: inline-block;">Cat&aacute;logo Disponible</h3>
+                <span id="cloudStatus" class="sync-status">Cargando...</span>
+            </div>
             <div class="filters">
                 <button type="button" class="filter-btn active" id="f-todos" onclick="filtrarCat('todos')">Todos</button>
                 <button type="button" class="filter-btn" id="f-ropa" onclick="filtrarCat('ropa')">Ropa y Moda</button>
@@ -130,8 +124,8 @@
 
         <div id="emptyState" class="empty-box">
             <div style="font-size: 42px;">&#128230;</div>
-            <h4>No hay art&iacute;culos publicados todav&iacute;a</h4>
-            <p>Toca el bot&oacute;n <b>"+ Publicar"</b> arriba a la derecha para subir tu primer art&iacute;culo.</p>
+            <h4 id="emptyTitle">No hay art&iacute;culos publicados todav&iacute;a</h4>
+            <p id="emptySubtitle">Toca el bot&oacute;n <b>"+ Publicar"</b> arriba a la derecha para subir tu primer art&iacute;culo.</p>
         </div>
     </main>
 
@@ -145,6 +139,11 @@
             <div class="modal-header">
                 <h3>Publicar Nuevo Art&iacute;culo</h3>
                 <button type="button" class="close-btn" onclick="ocultarVentana('uploadModal')">&#10005;</button>
+            </div>
+
+            <div class="form-group">
+                <label>Contrase&ntilde;a de Administrador</label>
+                <input type="password" id="adminPassUpload" class="form-control" placeholder="Escribe tu contrase&ntilde;a (ej. franceci2026)">
             </div>
 
             <div class="form-group">
@@ -175,48 +174,53 @@
             <div class="form-group">
                 <label>Fotograf&iacute;as (Puedes elegir varias)</label>
                 <input type="file" id="prodImageFiles" accept="image/*" multiple class="form-control" onchange="procesarFotosSeleccionadas(this)">
-                <p style="font-size: 11px; color: #6e5a4f; margin-top: 4px;">Puedes tocar el bot&oacute;n varias veces para ir sumando m&aacute;s fotos del mismo art&iacute;culo.</p>
+                <p style="font-size: 11px; color: #6e5a4f; margin-top: 4px;">Puedes elegir varias fotos o tocar varias veces para sumar m&aacute;s.</p>
                 <div id="previewContainer" class="preview-grid"></div>
             </div>
 
-            <button type="button" class="btn btn-accent" style="width: 100%; padding: 12px; font-size: 15px;" onclick="guardarProducto()">
-                &#10004; Guardar y Publicar Art&iacute;culo
+            <button type="button" id="btnGuardarProd" class="btn btn-accent" style="width: 100%; padding: 12px; font-size: 15px;" onclick="guardarProducto()">
+                &#9729;&#65039; Subir y Publicar en Tiempo Real
             </button>
         </div>
     </div>
 
-    <!-- VENTANA 2: ADMIN Y BANCO -->
+    <!-- VENTANA 2: ADMIN, GOOGLE CLOUD Y BANCO -->
     <div id="bankModal" class="modal-overlay sans">
         <div class="modal-box">
             <div class="modal-header">
-                <h3>Configuraci&oacute;n y Web</h3>
+                <h3>Panel de Administraci&oacute;n</h3>
                 <button type="button" class="close-btn" onclick="ocultarVentana('bankModal')">&#10005;</button>
             </div>
 
-            <p style="font-size: 12px; font-weight: bold; color: #b85d34; margin-bottom: 8px;">1. DATOS PARA TRANSFERENCIAS</p>
+            <p style="font-size: 12px; font-weight: bold; color: #b85d34; margin-bottom: 8px;">1. CONEXI&Oacute;N CON GOOGLE SHEETS</p>
             <div class="form-group">
-                <label>Banco</label>
-                <input type="text" id="bankNameInput" class="form-control" placeholder="Ej. BBVA / Nu / Santander">
+                <label>URL de tu App Web de Google Apps Script</label>
+                <input type="url" id="googleScriptUrlInput" class="form-control" placeholder="https://script.google.com/macros/s/.../exec">
             </div>
             <div class="form-group">
-                <label>CLABE o N&uacute;mero de Tarjeta</label>
-                <input type="text" id="bankClabeInput" class="form-control" placeholder="18 d&iacute;gitos CLABE o 16 de tarjeta">
+                <label>Tu Contrase&ntilde;a de Admin</label>
+                <input type="password" id="adminPassConfig" class="form-control" placeholder="Ej. franceci2026">
             </div>
-            <div class="form-group">
-                <label>Nombre del Titular</label>
-                <input type="text" id="bankOwnerInput" class="form-control" placeholder="Tu nombre completo">
-            </div>
-            <button type="button" class="btn btn-primary" style="width: 100%; margin-bottom: 18px;" onclick="guardarBanco()">
-                Guardar Cuenta Bancaria
+            <button type="button" class="btn btn-secondary" style="width: 100%; margin-bottom: 18px;" onclick="guardarConexionGoogle()">
+                &#128279; Guardar Conexi&oacute;n en este Dispositivo
             </button>
 
             <div style="border-top: 1px solid #e6dec5; padding-top: 14px;">
-                <p style="font-size: 12px; font-weight: bold; color: #b85d34; margin-bottom: 6px;">2. ACTUALIZAR ARCHIVO PARA GITHUB</p>
-                <p style="font-size: 12px; color: #4a3b34; margin-bottom: 10px;">
-                    Tus productos se guardan autom&aacute;ticamente en tu navegador. Cuando quieras que tus clientes los vean desde otros celulares en tu link de GitHub, descarga este archivo actualizado y s&uacute;belo a tu repositorio:
-                </p>
-                <button type="button" class="btn btn-accent" style="width: 100%; padding: 12px;" onclick="exportarTiendaCompleta()">
-                    &#128190; Descargar index.html con mis Art&iacute;culos
+                <p style="font-size: 12px; font-weight: bold; color: #b85d34; margin-bottom: 8px;">2. DATOS BANCARIOS PARA TRANSFERENCIAS</p>
+                <div class="form-group">
+                    <label>Banco</label>
+                    <input type="text" id="bankNameInput" class="form-control" placeholder="Ej. BBVA / Nu / Santander">
+                </div>
+                <div class="form-group">
+                    <label>CLABE o N&uacute;mero de Tarjeta</label>
+                    <input type="text" id="bankClabeInput" class="form-control" placeholder="18 d&iacute;gitos CLABE o 16 de tarjeta">
+                </div>
+                <div class="form-group">
+                    <label>Nombre del Titular</label>
+                    <input type="text" id="bankOwnerInput" class="form-control" placeholder="Tu nombre completo">
+                </div>
+                <button type="button" id="btnGuardarBanco" class="btn btn-primary" style="width: 100%;" onclick="guardarBanco()">
+                    Guardar Cuenta Bancaria en la Nube
                 </button>
             </div>
         </div>
@@ -247,23 +251,27 @@
         </div>
     </div>
 
-    <!-- DATOS GUARDADOS PARA GITHUB -->
-    <script id="initialSeedData">
-        window.SEED_PRODUCTS = [];
-        window.SEED_BANK = { bank: 'Por definir', clabe: 'Por definir', owner: 'FranCeci' };
-    </script>
-
-    <!-- LOGICA DIRECTA -->
     <script>
-        var products = window.SEED_PRODUCTS || [];
-        var bankInfo = window.SEED_BANK || { bank: 'Por definir', clabe: 'Por definir', owner: 'FranCeci' };
+        // =========================================================================
+        // PEGA AQUI ENTRE LAS COMILLAS TU LINK DE GOOGLE APPS SCRIPT PARA QUE
+        // TODOS LOS CELULARES Y COMPUTADORAS SE CONECTEN AUTOMATICAMENTE:
+        // =========================================================================
+        var DEFAULT_GOOGLE_URL = ""; 
+
+        var googleUrl = localStorage.getItem('fc_google_url') || DEFAULT_GOOGLE_URL;
+        var savedAdminPass = localStorage.getItem('fc_admin_pass') || '';
+
+        var products = [];
+        var bankInfo = { bank: 'Por definir', clabe: 'Por definir', owner: 'FranCeci' };
         var cart = [];
         var currentFilter = 'todos';
         var stagedImages = [];
         var slideIndexMap = {};
 
-        // Mostrar y ocultar ventanas directamente por estilo inline (infalible)
         function mostrarVentana(id) {
+            if (id === 'uploadModal' && savedAdminPass) {
+                document.getElementById('adminPassUpload').value = savedAdminPass;
+            }
             var el = document.getElementById(id);
             if (el) el.style.display = 'flex';
         }
@@ -273,78 +281,50 @@
             if (el) el.style.display = 'none';
         }
 
-        // Base de datos IndexedDB + Respaldo LocalStorage
-        function abrirBD(callback) {
-            if (!window.indexedDB) { callback(null); return; }
-            try {
-                var req = indexedDB.open('FranCeciDB_v2', 1);
-                req.onupgradeneeded = function(e) {
-                    var db = e.target.result;
-                    if (!db.objectStoreNames.contains('store')) db.createObjectStore('store');
-                };
-                req.onsuccess = function(e) { callback(e.target.result); };
-                req.onerror = function() { callback(null); };
-            } catch (err) { callback(null); }
+        function actualizarEstadoNube(texto, colorFondo) {
+            var badge = document.getElementById('cloudStatus');
+            if (!badge) return;
+            badge.innerHTML = texto;
+            if (colorFondo) badge.style.backgroundColor = colorFondo;
         }
 
-        function guardarEnMemoria(clave, valor, alTerminar) {
-            try { localStorage.setItem('fc_' + clave, JSON.stringify(valor)); } catch (e) {}
-            abrirBD(function(db) {
-                if (!db) { if (alTerminar) alTerminar(); return; }
+        // Cargar productos desde Google Sheets en tiempo real
+        function sincronizarDesdeGoogle() {
+            if (!googleUrl) {
+                actualizarEstadoNube('Modo Local (Falta conectar URL de Google en Admin)', '#f5d6c6');
                 try {
-                    var tx = db.transaction('store', 'readwrite');
-                    tx.objectStore('store').put(valor, clave);
-                    tx.oncomplete = function() { if (alTerminar) alTerminar(); };
-                    tx.onerror = function() { if (alTerminar) alTerminar(); };
-                } catch (e) { if (alTerminar) alTerminar(); }
-            });
-        }
-
-        function cargarDeMemoria(clave, callback) {
-            abrirBD(function(db) {
-                if (!db) {
-                    try {
-                        var ls = localStorage.getItem('fc_' + clave);
-                        callback(ls ? JSON.parse(ls) : null);
-                    } catch (e) { callback(null); }
-                    return;
-                }
-                try {
-                    var tx = db.transaction('store', 'readonly');
-                    var req = tx.objectStore('store').get(clave);
-                    req.onsuccess = function() {
-                        if (req.result !== undefined && req.result !== null) {
-                            callback(req.result);
-                        } else {
-                            try {
-                                var ls = localStorage.getItem('fc_' + clave);
-                                callback(ls ? JSON.parse(ls) : null);
-                            } catch (e) { callback(null); }
-                        }
-                    };
-                    req.onerror = function() { callback(null); };
-                } catch (e) { callback(null); }
-            });
-        }
-
-        // Inicializar datos
-        cargarDeMemoria('products', function(savedProds) {
-            if (savedProds && savedProds.length > 0) {
-                var existentes = {};
-                for (var i = 0; i < savedProds.length; i++) existentes[savedProds[i].id] = true;
-                for (var j = 0; j < products.length; j++) {
-                    if (!existentes[products[j].id]) savedProds.push(products[j]);
-                }
-                products = savedProds;
+                    var localP = localStorage.getItem('fc_backup_products');
+                    if (localP) products = JSON.parse(localP);
+                } catch(e) {}
+                dibujarCatalogo();
+                return;
             }
-            dibujarCatalogo();
-        });
 
-        cargarDeMemoria('bank', function(savedBank) {
-            if (savedBank && savedBank.bank) bankInfo = savedBank;
-        });
+            actualizarEstadoNube('Sincronizando con Google...', '#e6dec5');
+            fetch(googleUrl + '?t=' + new Date().getTime())
+                .then(function(res) { return res.json(); })
+                .then(function(data) {
+                    if (data && Array.isArray(data.products)) {
+                        products = data.products;
+                        try { localStorage.setItem('fc_backup_products', JSON.stringify(products)); } catch(e) {}
+                    }
+                    if (data && data.bank) {
+                        bankInfo = data.bank;
+                    }
+                    actualizarEstadoNube('&#9989; En l&iacute;nea', '#d4edda');
+                    dibujarCatalogo();
+                })
+                .catch(function(err) {
+                    actualizarEstadoNube(' Modo sin conexi&oacute;n', '#f8d7da');
+                    try {
+                        var localP = localStorage.getItem('fc_backup_products');
+                        if (localP) products = JSON.parse(localP);
+                    } catch(e) {}
+                    dibujarCatalogo();
+                });
+        }
 
-        // Procesar varias fotos con compresion ligera
+        // Procesar fotos con compresion optima para Google Sheets (evita limite de 50,000 caracteres por celda)
         function procesarFotosSeleccionadas(inputEl) {
             var files = inputEl.files;
             if (!files || files.length === 0) return;
@@ -357,7 +337,7 @@
                         var img = new Image();
                         img.onload = function() {
                             var canvas = document.createElement('canvas');
-                            var max = 700;
+                            var max = 420; // Tamano optimo para guardar varias fotos en una celda de Google Sheets
                             var w = img.width;
                             var h = img.height;
                             if (w > h && w > max) { h = Math.round(h * max / w); w = max; }
@@ -366,7 +346,7 @@
                             canvas.height = h;
                             var ctx = canvas.getContext('2d');
                             ctx.drawImage(img, 0, 0, w, h);
-                            stagedImages.push(canvas.toDataURL('image/jpeg', 0.75));
+                            stagedImages.push(canvas.toDataURL('image/jpeg', 0.62));
                             pendientes--;
                             if (pendientes === 0) {
                                 inputEl.value = '';
@@ -398,6 +378,7 @@
         }
 
         function guardarProducto() {
+            var pass = document.getElementById('adminPassUpload').value.trim();
             var name = document.getElementById('prodName').value.trim();
             var price = parseFloat(document.getElementById('prodPrice').value);
             var cat = document.getElementById('prodCategory').value;
@@ -411,6 +392,17 @@
                 alert('Selecciona al menos una foto para el art\u00edculo.');
                 return;
             }
+            if (!googleUrl) {
+                alert('Primero pega la URL de tu Google Apps Script en el bot\u00f3n Admin.');
+                return;
+            }
+            if (!pass) {
+                alert('Ingresa tu contrase\u00f1a de administrador.');
+                return;
+            }
+
+            savedAdminPass = pass;
+            localStorage.setItem('fc_admin_pass', pass);
 
             var nuevo = {
                 id: new Date().getTime(),
@@ -422,27 +414,63 @@
                 image: stagedImages[0]
             };
 
-            products.unshift(nuevo);
-            stagedImages = [];
-            dibujarMiniaturas();
-            document.getElementById('prodName').value = '';
-            document.getElementById('prodPrice').value = '';
-            document.getElementById('prodDesc').value = '';
-            ocultarVentana('uploadModal');
+            var btn = document.getElementById('btnGuardarProd');
+            btn.disabled = true;
+            btn.innerHTML = 'Subiendo a Google...';
 
-            guardarEnMemoria('products', products, function() {
+            fetch(googleUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({ action: 'add', pass: pass, product: nuevo })
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(res) {
+                btn.disabled = false;
+                btn.innerHTML = '&#9729;&#65039; Subir y Publicar en Tiempo Real';
+                if (!res.ok) {
+                    alert('Error: ' + (res.error || 'No se pudo guardar'));
+                    return;
+                }
+                products.unshift(nuevo);
+                stagedImages = [];
+                dibujarMiniaturas();
+                document.getElementById('prodName').value = '';
+                document.getElementById('prodPrice').value = '';
+                document.getElementById('prodDesc').value = '';
+                ocultarVentana('uploadModal');
                 dibujarCatalogo();
+            })
+            .catch(function() {
+                btn.disabled = false;
+                btn.innerHTML = '&#9729;&#65039; Subir y Publicar en Tiempo Real';
+                alert('Error de conexi\u00f3n al subir a Google Sheets. Verifica tu URL y que hayas elegido "Cualquier usuario" al implementar.');
             });
         }
 
         function eliminarArticulo(id) {
-            if (!confirm('\u00bfEliminar este art\u00edculo del cat\u00e1logo?')) return;
-            var nuevos = [];
-            for (var i = 0; i < products.length; i++) {
-                if (products[i].id !== id) nuevos.push(products[i]);
-            }
-            products = nuevos;
-            guardarEnMemoria('products', products, function() {
+            var pass = savedAdminPass || prompt('Escribe tu contrase\u00f1a de administrador para eliminar:');
+            if (!pass) return;
+            if (!confirm('\u00bfEliminar este art\u00edculo de la tienda en todos los dispositivos?')) return;
+
+            actualizarEstadoNube('Eliminando...', '#e6dec5');
+            fetch(googleUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({ action: 'delete', pass: pass, id: id })
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(res) {
+                if (!res.ok) {
+                    alert('Contrase\u00f1a incorrecta.');
+                    actualizarEstadoNube('&#9989; En l&iacute;nea', '#d4edda');
+                    return;
+                }
+                var nuevos = [];
+                for (var i = 0; i < products.length; i++) {
+                    if (products[i].id !== id) nuevos.push(products[i]);
+                }
+                products = nuevos;
+                actualizarEstadoNube('&#9989; En l&iacute;nea', '#d4edda');
                 dibujarCatalogo();
             });
         }
@@ -530,27 +558,51 @@
             }
         }
 
-        // Banco y Admin
-        function abrirConfigBanco() {
+        function abrirConfigAdmin() {
+            document.getElementById('googleScriptUrlInput').value = googleUrl;
+            document.getElementById('adminPassConfig').value = savedAdminPass;
             document.getElementById('bankNameInput').value = bankInfo.bank !== 'Por definir' ? bankInfo.bank : '';
             document.getElementById('bankClabeInput').value = bankInfo.clabe !== 'Por definir' ? bankInfo.clabe : '';
             document.getElementById('bankOwnerInput').value = bankInfo.owner !== 'FranCeci' ? bankInfo.owner : '';
             mostrarVentana('bankModal');
         }
 
+        function guardarConexionGoogle() {
+            googleUrl = document.getElementById('googleScriptUrlInput').value.trim();
+            savedAdminPass = document.getElementById('adminPassConfig').value.trim();
+            localStorage.setItem('fc_google_url', googleUrl);
+            localStorage.setItem('fc_admin_pass', savedAdminPass);
+            alert('Conexi\u00f3n guardada. Sincronizando cat\u00e1logo...');
+            ocultarVentana('bankModal');
+            sincronizarDesdeGoogle();
+        }
+
         function guardarBanco() {
-            bankInfo = {
+            var pass = document.getElementById('adminPassConfig').value.trim() || savedAdminPass;
+            if (!googleUrl || !pass) {
+                alert('Aseg\u00farate de poner la URL de Google y tu contrase\u00f1a arriba.');
+                return;
+            }
+            var nuevoBanco = {
                 bank: document.getElementById('bankNameInput').value.trim() || 'Por definir',
                 clabe: document.getElementById('bankClabeInput').value.trim() || 'Por definir',
                 owner: document.getElementById('bankOwnerInput').value.trim() || 'FranCeci'
             };
-            guardarEnMemoria('bank', bankInfo, function() {
-                alert('Datos bancarios guardados.');
+
+            fetch(googleUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({ action: 'bank', pass: pass, bank: nuevoBanco })
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(res) {
+                if (!res.ok) { alert('Contrase\u00f1a incorrecta'); return; }
+                bankInfo = nuevoBanco;
+                alert('Datos bancarios actualizados en la nube.');
                 ocultarVentana('bankModal');
             });
         }
 
-        // Carrito
         function agregarAlCarrito(id) {
             var prod = null;
             for (var i = 0; i < products.length; i++) {
@@ -561,11 +613,7 @@
 
             var encontrado = false;
             for (var j = 0; j < cart.length; j++) {
-                if (cart[j].id === id) {
-                    cart[j].qty++;
-                    encontrado = true;
-                    break;
-                }
+                if (cart[j].id === id) { cart[j].qty++; encontrado = true; break; }
             }
             if (!encontrado) {
                 cart.push({ id: prod.id, name: prod.name, price: prod.price, image: imgPrincipal, qty: 1 });
@@ -642,21 +690,8 @@
             window.open(url, '_blank');
         }
 
-        // Exportar archivo con productos grabados adentro para GitHub
-        function exportarTiendaCompleta() {
-            ocultarVentana('bankModal');
-            var seedScript = document.getElementById('initialSeedData');
-            seedScript.textContent = '\nwindow.SEED_PRODUCTS = ' + JSON.stringify(products) + ';\nwindow.SEED_BANK = ' + JSON.stringify(bankInfo) + ';\n';
-
-            var contenidoHTML = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-            var blob = new Blob([contenidoHTML], { type: 'text/html;charset=utf-8' });
-            var link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = 'index.html';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
+        // Iniciar sincronizacion al abrir la pagina
+        sincronizarDesdeGoogle();
     </script>
 </body>
 </html>
