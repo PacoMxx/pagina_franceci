@@ -3,20 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FranCeci - Art&iacute;culos de Segunda Mano</title>
+    <title>FranCeci - Bazar &amp; Segunda Mano</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body { background-color: #fbf9f5; color: #2c221e; font-family: Georgia, 'Times New Roman', serif; min-height: 100vh; display: flex; flex-direction: column; }
         .sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
         
-        header { background: #f4efe6; border-bottom: 2px solid #e6dec5; position: sticky; top: 0; z-index: 100; padding: 12px 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
-        .nav-container { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
-        .brand { display: flex; align-items: center; gap: 10px; }
-        .brand h1 { font-size: 24px; color: #5c4033; letter-spacing: 0.5px; }
-        .brand p { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #b85d34; font-weight: bold; }
+        /* Barra superior minimalista */
+        header { background: #f4efe6; border-bottom: 1px solid #e6dec5; position: sticky; top: 0; z-index: 100; padding: 10px 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); }
+        .nav-container { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+        .nav-mini-brand { font-size: 18px; font-weight: bold; color: #5c4033; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; }
         
         .nav-buttons { display: flex; align-items: center; gap: 8px; }
-        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 10px 14px; border-radius: 8px; font-size: 13px; font-weight: bold; border: none; cursor: pointer; text-decoration: none; user-select: none; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 9px 14px; border-radius: 8px; font-size: 13px; font-weight: bold; border: none; cursor: pointer; text-decoration: none; user-select: none; }
         .btn:active { transform: scale(0.96); }
         .btn:disabled { opacity: 0.6; cursor: not-allowed; }
         .btn-primary { background: #5c4033; color: #ffffff; }
@@ -25,20 +24,23 @@
         .btn-whatsapp { background: #25D366; color: #ffffff; width: 100%; padding: 14px; font-size: 15px; border-radius: 10px; margin-top: 10px; }
         .badge-count { background: #2c221e; color: #fff; font-size: 11px; padding: 2px 6px; border-radius: 99px; margin-left: 4px; }
 
-        .hero { background: #efe8d8; border-bottom: 1px solid #e6dec5; padding: 28px 16px; text-align: center; }
-        .hero h2 { font-size: 24px; color: #5c4033; margin-bottom: 8px; }
-        .hero p { font-size: 14px; color: #4a3b34; max-width: 600px; margin: 0 auto 14px; line-height: 1.4; }
-        .pills-wrap { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; max-width: 750px; margin: 0 auto; }
-        .pill { display: inline-block; background: #fff; border: 1px solid #e6dec5; padding: 6px 14px; border-radius: 99px; font-size: 12px; color: #5c4033; font-weight: bold; }
+        /* Portada con Logo Grande Centrado */
+        .hero { background: linear-gradient(180deg, #fbf9f5 0%, #efe8d8 100%); border-bottom: 2px solid #e6dec5; padding: 32px 16px 28px; text-align: center; }
+        .logo-showcase { max-width: 480px; width: 100%; margin: 0 auto 14px; display: block; }
+        .logo-custom-img { max-width: 380px; width: 90%; height: auto; margin: 0 auto 14px; display: block; border-radius: 12px; }
+        .hero-tagline { font-size: 15px; color: #4a3b34; max-width: 580px; margin: 0 auto 18px; line-height: 1.5; font-style: italic; }
+        .pills-wrap { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; max-width: 780px; margin: 0 auto; }
+        .pill { display: inline-block; background: #fff; border: 1px solid #dfd5b8; padding: 7px 15px; border-radius: 99px; font-size: 12px; color: #5c4033; font-weight: bold; box-shadow: 0 1px 3px rgba(0,0,0,0.03); }
 
-        main { max-width: 1100px; width: 100%; margin: 0 auto; padding: 24px 16px; flex: 1; }
-        .catalog-header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid #e6dec5; }
+        /* Catalogo */
+        main { max-width: 1100px; width: 100%; margin: 0 auto; padding: 26px 16px; flex: 1; }
+        .catalog-header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 22px; padding-bottom: 12px; border-bottom: 1px solid #e6dec5; }
         .filters { display: flex; flex-wrap: wrap; gap: 6px; }
         .filter-btn { padding: 7px 14px; border-radius: 99px; font-size: 12px; font-weight: bold; border: 1px solid #e6dec5; background: #f4efe6; color: #5c4033; cursor: pointer; }
         .filter-btn.active { background: #5c4033; color: #fff; border-color: #5c4033; }
 
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
-        .card { background: #f4efe6; border: 1px solid #e6dec5; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 2px 5px rgba(0,0,0,0.04); }
+        .card { background: #f4efe6; border: 1px solid #e6dec5; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 2px 5px rgba(0,0,0,0.04); transition: transform 0.2s; }
         .card-img-wrap { position: relative; height: 220px; background: #e6dec5; overflow: hidden; }
         .card-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
         .cat-tag { position: absolute; top: 8px; left: 8px; background: rgba(44,34,30,0.85); color: #fff; font-size: 10px; text-transform: uppercase; padding: 4px 8px; border-radius: 4px; font-weight: bold; }
@@ -75,7 +77,6 @@
         .delivery-option:hover { background: #fbf9f5; border-color: #e6dec5; }
         .delivery-option input { margin-top: 3px; accent-color: #5c4033; }
 
-        /* Boton flotante de WhatsApp */
         .wa-float { position: fixed; bottom: 20px; right: 20px; background: #25D366; color: #fff; padding: 12px 18px; border-radius: 99px; font-size: 14px; font-weight: bold; text-decoration: none; box-shadow: 0 4px 14px rgba(0,0,0,0.25); z-index: 900; display: flex; align-items: center; gap: 8px; border: 2px solid #fff; transition: transform 0.2s; }
         .wa-float:active { transform: scale(0.95); }
 
@@ -85,14 +86,12 @@
 </head>
 <body>
 
+    <!-- BARRA DE HERRAMIENTAS SUPERIOR -->
     <header>
         <div class="nav-container">
-            <div class="brand">
-                <span style="font-size: 28px;">&#129523;</span>
-                <div>
-                    <h1>FranCeci</h1>
-                    <p class="sans">Art&iacute;culos de segunda mano</p>
-                </div>
+            <div class="nav-mini-brand">
+                <span>&#129523;</span>
+                <span>FranCeci</span>
             </div>
             
             <div class="nav-buttons sans">
@@ -109,9 +108,95 @@
         </div>
     </header>
 
+    <!-- PORTADA PRINCIPAL CON EL LOGO CENTRADO EN GRANDE -->
     <section class="hero">
-        <h2>Tesoro y estilo con historia</h2>
-        <p class="sans">Art&iacute;culos de segunda mano &uacute;nicos seleccionados con amor. Dale una segunda oportunidad a las cosas y encuentra piezas especiales.</p>
+        <!-- Logo Vectorial de Alta Definicion inspirado en el diseno oficial de FranCeci -->
+        <svg id="svgLogoBrand" class="logo-showcase" viewBox="0 0 650 300" xmlns="http://www.w3.org/2000/svg">
+            <!-- Ramas botanicas izquierdas -->
+            <g stroke="#b87d34" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M250,115 Q215,95 190,102" />
+                <path d="M235,107 C228,92 215,92 220,105 C225,112 232,110 235,107 Z" />
+                <path d="M218,101 C210,88 198,90 205,101 C210,106 215,104 218,101 Z" />
+                <path d="M230,110 C220,120 208,118 214,108" />
+                <path d="M262,102 Q248,72 252,48" />
+                <path d="M256,88 C242,74 244,54 256,50 C266,58 264,76 256,88 Z" />
+                <path d="M248,70 L256,76 M258,64 L252,70" />
+                <circle cx="226" cy="72" r="2.5" fill="#b87d34" />
+            </g>
+
+            <!-- Maleta Vintage Central -->
+            <g stroke="#a85632" stroke-width="2.2" fill="#fbf9f5" stroke-linejoin="round" stroke-linecap="round">
+                <!-- Cuerpo de maleta 3D -->
+                <polygon points="275,58 345,44 358,50 358,106 288,122 275,114" fill="#fbf9f5" />
+                <line x1="288" y1="64" x2="358" y2="50" />
+                <line x1="288" y1="64" x2="288" y2="122" />
+                <line x1="275" y1="58" x2="288" y2="64" />
+                <!-- Asa superior -->
+                <path d="M308,52 L308,43 Q318,39 326,41 L326,49" fill="none" stroke-width="2.5" />
+                <!-- Correas con hebillas -->
+                <path d="M298,55 L302,61 L302,119" fill="none" />
+                <path d="M303,54 L307,60 L307,118" fill="none" />
+                <rect x="300" y="84" width="8" height="9" rx="1.5" fill="#e6dec5" />
+                <path d="M335,47 L339,53 L339,110" fill="none" />
+                <path d="M340,46 L344,52 L344,109" fill="none" />
+                <rect x="337" y="76" width="8" height="9" rx="1.5" fill="#e6dec5" />
+                <!-- Esquinas reforzadas -->
+                <path d="M288,64 L295,63 L295,70 L288,71 Z" fill="#e6dec5" />
+                <path d="M288,114 L295,113 L295,120 L288,122 Z" fill="#e6dec5" />
+            </g>
+
+            <!-- Rama dorada central y destellos -->
+            <g stroke="#b87d34" stroke-width="2" fill="none" stroke-linecap="round">
+                <path d="M368,108 Q365,75 384,42" />
+                <path d="M368,95 C362,72 372,50 384,42 C390,62 380,82 368,95 Z" />
+                <path d="M368,102 C382,92 392,78 390,68 C378,74 372,88 368,102 Z" />
+                <!-- Estrella dorada superior -->
+                <path d="M365,20 Q365,30 375,30 Q365,30 365,40 Q365,30 355,30 Q365,30 365,20 Z" fill="#b87d34" stroke="none" />
+            </g>
+
+            <!-- Perchero Vintage y Ganchos Derecha -->
+            <g stroke="#a85632" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <!-- Poste central -->
+                <line x1="426" y1="54" x2="426" y2="122" />
+                <line x1="429" y1="54" x2="429" y2="122" />
+                <circle cx="427.5" cy="50" r="4" fill="#fbf9f5" />
+                <!-- Brazos curvos del perchero -->
+                <path d="M426,68 C410,68 400,58 404,52 C407,48 412,53 410,57" />
+                <path d="M429,68 C445,68 455,58 451,52 C448,48 443,53 445,57" />
+                <path d="M426,76 C406,78 396,72 398,64" />
+                <path d="M429,76 C449,78 459,72 457,64" />
+                <!-- Ganchos de ropa colgados -->
+                <polygon points="412,78 386,98 438,98" fill="#fbf9f5" fill-opacity="0.7" />
+                <polygon points="442,78 416,98 468,98" fill="#fbf9f5" fill-opacity="0.7" />
+                <!-- Destello derecho -->
+                <path d="M482,90 Q482,103 494,103 Q482,103 482,116 Q482,103 470,103 Q482,103 482,90 Z" fill="#b87d34" stroke="none" />
+                <circle cx="456" cy="118" r="2" fill="#b87d34" stroke="none" />
+            </g>
+
+            <!-- TEXTO PRINCIPAL: FranCeci -->
+            <text x="325" y="192" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="92" font-weight="bold" fill="#543828" letter-spacing="1">FranCeci</text>
+
+            <!-- SUBTITULO: BAZAAR & SEGUNDA MANO -->
+            <text x="325" y="232" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="21" font-weight="bold" fill="#b0552d" letter-spacing="4.5">BAZAR &amp; SEGUNDA MANO</text>
+
+            <!-- Ornamento Botanico Inferior -->
+            <g stroke="#b87d34" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M272,254 Q325,272 375,256" />
+                <path d="M292,260 C286,250 296,244 302,252 C304,256 298,260 292,260 Z" />
+                <path d="M312,263 C308,252 318,246 324,254 C326,258 318,263 312,263 Z" />
+                <path d="M334,263 C332,252 342,246 346,254 C348,258 340,263 334,263 Z" />
+                <path d="M354,260 C352,250 362,245 366,252 C368,256 360,260 354,260 Z" />
+                <path d="M302,262 C296,272 306,278 312,270" />
+                <path d="M326,264 C322,274 332,280 338,270" />
+                <circle cx="256" cy="258" r="2.5" fill="#b87d34" stroke="none" />
+                <circle cx="390" cy="258" r="2.5" fill="#b87d34" stroke="none" />
+            </g>
+        </svg>
+
+        <p class="hero-tagline">
+            "Tesoro y estilo con historia. Art&iacute;culos &uacute;nicos seleccionados con amor buscando una segunda oportunidad."
+        </p>
+
         <div class="pills-wrap sans">
             <div class="pill">&#128647; Entregas personales en alguna l&iacute;nea del metro o punto a convenir</div>
             <div class="pill">&#128666; Env&iacute;os en el Distrito Federal (costo de env&iacute;o por WhatsApp)</div>
@@ -148,7 +233,7 @@
     </a>
 
     <footer class="sans">
-        &copy; 2026 FranCeci &bull; Art&iacute;culos de Segunda Mano &bull; Distrito Federal / CDMX
+        &copy; 2026 FranCeci &bull; Bazar &amp; Segunda Mano &bull; Distrito Federal / CDMX
     </footer>
 
     <!-- VENTANA 1: PUBLICAR ARTICULO -->
